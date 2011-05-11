@@ -4,9 +4,9 @@ var ical = require('ical'),
     crypto = require('crypto');
 
 //Setup the DB connection
-var db = new (cradle.Connection)('127.0.0.1','5984').database('togather');
+var eventsDb = new (cradle.Connection)('127.0.0.1','5984').database('togather_events');
 
-//Saves new events to the db. This will create events if
+//Saves new events to the database. This will create events if
 //they don't exist or replace them if they do.
 var saveEvents = function(newEvents, url, callback) {
     var uid,
@@ -33,7 +33,7 @@ var saveEvents = function(newEvents, url, callback) {
     }
     
     //Save this document to the database - id, data, callback
-    db.save(docs, function (err, res) {
+    eventsDb.save(docs, function (err, res) {
         console.log(res);
         
         if (callback) {
@@ -57,9 +57,9 @@ var parseIcsFile = function(url, callback) {
     }); 
 };
 
-db.destroy(function() {
-    db.create(function() {
-        db.save('_design/events', {
+eventsDb.destroy(function() {
+    eventsDb.create(function() {
+        eventsDb.save('_design/events', {
             origin_url: {
                 map: function (doc) {
                     emit(doc.origin_url, doc);
