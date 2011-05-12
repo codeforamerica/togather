@@ -23,11 +23,12 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res) {
-    events.refresh();
-    
-    res.render('index', {
-        title: 'Event Dashboard'
-    });
+    events.get(function(evts){
+        res.render('hcal', {
+            'title': 'Events Dashboard (hCal)',
+            'events': evts
+        });
+    });    
 });
 
 // Only listen on $ node app.js

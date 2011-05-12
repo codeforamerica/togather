@@ -42,6 +42,25 @@ var saveEvents = function(newEvents, url, callback) {
     });    
 };
 
+//Get the events we've already stored for this url
+exports.get = function(callback) {
+    eventsDb.view('events/origin_url', 
+        function (err, docs) {
+            var i, currentEvents = {};
+            
+            if (err) {
+                console.log(err);
+            } else {
+                for (i=0; i<docs.length; i++) {
+                    currentEvents[docs[i].value.uid] = docs[i].value;
+                }
+            }
+            
+            callback(currentEvents);
+        }
+    );
+};
+
 exports.refresh =  function() {
     eventsDb.destroy(function() {
         eventsDb.create(function() {
