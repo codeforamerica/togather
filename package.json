@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Togather",
   "homepage": "http://codeforamerica.org",
-  "main": "./app/server.js",
+  "main": "./app/app.js",
   "repository" : { 
     "type": "git",
     "url": "git@github.com:codeforamerica/togather.git"
@@ -12,7 +12,9 @@
     "node" : "v0.4.4 || v0.4.5 || v0.4.6 || v0.4.7"
   },
   "dependencies": {
-    "express" : "2.3.4",
-    "ejs" : "0.4.2"
+    "cradle": "0.5.5",
+    "ejs": "0.4.2",
+    "express": "2.3.4",
+    "ical": ""
   }
 }
