@@ -42,42 +42,34 @@ var saveEvents = function(newEvents, url, callback) {
     });    
 };
 
-
-//Parse an ical ics file
-var parseIcsFile = function(url, callback) {
-    ical.fromURL(url, {}, function(err, newEvents){
-        newEvents = newEvents || {};
-        
-        if (err) {
-            console.log(err);
-        }
-        
-        //console.log(newEvents);
-        callback(newEvents, url);
-    }); 
-};
-
-
-eventsDb.destroy(function() {
-    eventsDb.create(function() {
-        eventsDb.save('_design/events', {
-            origin_url: {
-                map: function (doc) {
-                    emit(doc.origin_url, doc);
+exports.refresh =  function() {
+    eventsDb.destroy(function() {
+        eventsDb.create(function() {
+            eventsDb.save('_design/events', {
+                origin_url: {
+                    map: function (doc) {
+                        emit(doc.origin_url, doc);
+                    }
                 }
-            }
+            });
+
+            //Each line of this file is an ics url
+            fs.readFile('./ics_urls.txt', function (err, data) {
+                var lines = data.toString().split('\n'),
+                    i;
+
+                for (i=0; i<lines.length; i++) {
+                    ical.fromURL(url, {}, function(err, newEvents){
+                        newEvents = newEvents || {};
+
+                        if (err) {
+                            console.log(err);
+                        }
+
+                        saveEvents(newEvents, url);
+                    });
+                }
+            });        
         });
-
-        //Each line of this file is an ics url
-        fs.readFile('./ics_urls.txt', function (err, data) {
-            var lines = data.toString().split('\n'),
-                i;
-
-            for (i=0; i<lines.length; i++) {
-                parseIcsFile(lines[i], function(newEvents, url) {
-                    saveEvents(newEvents, url);
-                });
-            }
-        });        
     });
-});
+};
