@@ -23,8 +23,6 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res) {
-    console.log(events);
-    
     events.refresh();
     
     res.render('index', {

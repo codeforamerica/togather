@@ -56,9 +56,11 @@ exports.refresh =  function() {
             //Each line of this file is an ics url
             fs.readFile('./ics_urls.txt', function (err, data) {
                 var lines = data.toString().split('\n'),
+                    url,
                     i;
 
                 for (i=0; i<lines.length; i++) {
+                    url = lines[i];
                     ical.fromURL(url, {}, function(err, newEvents){
                         newEvents = newEvents || {};
 
