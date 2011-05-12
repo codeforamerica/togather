@@ -4,7 +4,7 @@ var ical = require('ical'),
     crypto = require('crypto');
 
 //Setup the DB connection
-var eventsDb = new (cradle.Connection)('127.0.0.1','5984').database('togather_events');
+var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events');
 
 //Saves new events to the database. This will create events if
 //they don't exist or replace them if they do.
