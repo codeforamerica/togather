@@ -5,9 +5,8 @@
   <link rel="stylesheet" href="stylesheets/style.css" />
   </head>
 
-<body>
-<div id="header">
-  <div class="wrapper">
+<body class="main">
+  <header id="page-header">
     <a id="title" class="left" href="/">CityCal</a>
     <div id="search-link" class="right nav-links">
       <img src="/images/search-icon.png" id="search-link" alt="Search" />
@@ -15,32 +14,19 @@
     <div id="search-input" class="right">
       <input type="input" id="search-input" class="right" value="Search..."/>
     </div>
-  </div>
-</div>
+  </header>
 
-<div class="wrapper">
-  <div id="content">
-    <section class="project_description">
-      
-      <section class="project_text">
-        <section class="cal-date">
-          <header>
-            <h1>Today</h1>
-          </header>
-        </section>
-        
-        <section class="cal-event">
-          <header>
-            <h1>How to dolor sit amet, consectetur adipiscing</h1>
-          </header>
-          <%- body %>
-        </section>
+  <article id="content">
+    <div class="content-inner">
+      <header class="content-header">
+        <h1>Today</h1>
+      </header>
 
-      </section>
-    </section>
-  </div>
+      <%- body %>
+    </div>
+  </article>
 
-  <div id="sidebar">
+  <aside id="sidebar">
     <div class="sidebar_box">
       <div class="sidebar_box_title">Neighborhoods</div>
       <div class="sidebar_box_content">
@@ -65,8 +51,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div id="footer">
+  </aside>
+  <footer id="footer">
     <!--
     <ul>
       <li><a href="#">About</a></li>
@@ -80,7 +66,6 @@
     <p><span>Created as Open Source by </span><a href="#">Code for America</a><br />
     “For a more transparent, efficient, and participitory future.”</p>
     <a href="http://codeforamerica.org" class="footer-logo"><img src="/images/cfa-full-logo.png"></img></a>
-  </div>
-</div>
+  </footer>
 </body>
 </html>

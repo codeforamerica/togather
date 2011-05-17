@@ -4,15 +4,17 @@
     if (events.hasOwnProperty(uid)) {
       event = events[uid];
 %>
-      <div class="vevent">
-        <!--<a class="url" href="<%= event.origin_url %>">
-          <%= event.origin_url %>
-        </a>-->
-        <div class="summary"><%= event.summary %></div>
-        <abbr class="dtstart" title="<%= event.start %>"><%= event.start %></abbr>-
-        <abbr class="dtend" title="<%= event.start %>"><%= event.start %></abbr>,
-        at <span class="location"><%= event.location %></span>
-      </div>
+      <section class="cal-event" itemscope itemtype="http://data-vocabulary.org/Event">
+        <header>
+          <h1 itemprop="summary"><%= event.summary %></h1>
+        </header>
+        <div class="cal-whenwhere">
+          <span itemprop="location"><%= event.location %></span> at
+          <time itemprop="startDate" datetime="<%= event.start %>">Oct 15, 7:00PM</time>—
+          <time itemprop="endDate" datetime="<%= event.end %>">Oct 15, 9:00PM</time>
+        </div>
+        <div class="cal-description" itemprop="description"><%= event.description || 'This is a happy little placeholder description.' %></div>
+      </section>
 <%
     }
   }

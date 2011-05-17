@@ -1,4 +1,4 @@
-body { background:#fff; font-family:Helvetica, Arial, sans-serif; color:#333; font-size:12px; padding:0; margin:0; }
+body { background:#fff; font-family:Helvetica, Arial, sans-serif; color:#666; font-size:12px; padding:0; margin:0; }
 
 h1 { font-size:24px; line-height:150%; margin-bottom:15px;}
 h2 { font-size:18px; line-height:150%; margin-bottom:15px;}
@@ -9,8 +9,9 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 
 .right { float:right; }
 .left { float:left; }
+.clear { clear: both; }
 
-#header {
+#page-header {
   height:20px;
   padding:15px 20px;
   margin-bottom:20px;
@@ -29,7 +30,7 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   font-size:18px;
 }
 
-.wrapper {
+.main {
   width:960px;
   position:absolute;
   left:50%;
@@ -87,32 +88,9 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   padding: 10px;
 }
 
-.wrapper > header > h1 {
-  font-weight: bold;
-  font-size: 4.2em;
-  margin-bottom: -10px;
-  text-transform: uppercase;
-  color: #992739;
-}
-
-.wrapper > header > h2 {
-  font-weight: bold;
-  font-size: 1.6em;
-  text-transform: uppercase;
-}
-
-.wrapper > header > h2 > a {
-  color: #992739;
-}
-
-.project_text {
-  padding: 10px;
-  background-color: white;
-}
-
-.cal-date {
+.content-header {
   background-color: transparent;
-  color: white;
+  color: #fff;
   margin-left: -40px;
   margin-right: -20px;
   margin-bottom: 1em;
@@ -123,17 +101,12 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   border-image: url(../images/project-overview-dropshadow.png) 0 0 10 0 stretch;
 }
 
-.cal-date > * {
+.content-header > * {
   background-color: #666;
   padding-left: 20px;
 }
 
-.project_image {
-  width: 570px;
-}
-
-.cal-date h1,
-.cal-event > header > h1 {
+.content-header h1 {
   font-weight: bold;
   font-size: 18px;
   text-transform: uppercase;
@@ -141,54 +114,10 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   margin-bottom: 0px;
 }
 
-
-.recipe_steps {
-  list-style: decimal;
-  padding-left: 2em;
-  margin-bottom: 1em;
-}
-
-.helpful_questions ul,
-.project_ingredients ul {
-  list-style-image: url(../images/list-item-check.png);
-  padding-left: 2em;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-.helpful_questions li,
-.project_ingredients li {
-  line-height: 1.7em;
-}
-
-.social_bar {
-  padding: 8px;
-  background-color: #ccc;
-  margin-top: 7px;
-  height: 24px;
-}
-
-.progress_bar {
-  float: right;
-  font-weight: bold;
-  font-size: 1.6em;
-  
-  margin-right: 10px;
-  margin-top: -2em;
-}
-
-#progress_indicator {
-  display: inline-block;
-  width: 150px;
-  height: 12px;
-  background-image: url(../images/progress-background.png);
-  background-position: 25% 50%;
-  margin-right: 0.5em;
-}
-/* END Main Content Section */
-.clear { 
-  clear: both;
-}
+.cal-event { margin:20px 0; }
+    .cal-event h1 { color:#543547; font-weight:bold; font-size:18px; line-height:20px; text-transform: uppercase; margin-bottom:5px; }
+    .cal-whenwhere { color:#99283a; }
+    .cal-description {}
 
 /* Footer */
 #footer {
