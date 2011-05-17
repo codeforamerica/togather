@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title><%= title %></title>
+  <title></title>
   <link rel="stylesheet" href="stylesheets/style.css" />
   </head>
 
@@ -17,7 +17,7 @@
   </header>
 
   <article id="content">
-    <div class="content-inner">
+    <div class="content-inner">      
       <header class="content-header">
         <h1>Today</h1>
       </header>
@@ -30,25 +30,13 @@
     <div class="sidebar_box">
       <div class="sidebar_box_title">Neighborhoods</div>
       <div class="sidebar_box_content">
-        <div class="sidebar_box_text">
-          Autocomplete field of neighborhoods
-        </div>
+        <%- partial('neighborhoods') %>
       </div>
     </div>
     <div class="sidebar_box">
       <div class="sidebar_box_title">Categories</div>
       <div class="sidebar_box_content">
-        <div class="sidebar_box_text">
-          <ol>
-            <li>Environment</li>
-            <li>Arts and Culture</li>
-            <li>Public Safety</li>
-            <li>Parks and Recreation</li>
-            <li>Economy and Jobs</li>
-            <li>Education</li>
-            <li>Families and Children</li>
-          </ol>
-        </div>
+        <%- partial('categories') %>
       </div>
     </div>
   </aside>

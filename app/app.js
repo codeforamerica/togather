@@ -24,7 +24,7 @@ app.configure('production', function(){
 // Routes
 app.get('/', function(req, res) {
     events.get(function(evts){
-        res.render('hcal', {
+        res.render('event-microdata', {
             'title': 'Events Dashboard (hCal)',
             'events': evts
         });
