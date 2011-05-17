@@ -1,12 +1,86 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='stylesheets/style.css' />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="stylesheets/style.css" />
   </head>
-  <body>
-    <div class="content">
-      <%- body %>
+
+<body>
+<div id="header">
+  <div class="wrapper">
+    <a id="title" class="left" href="/">CityCal</a>
+    <div id="search-link" class="right nav-links">
+      <img src="/images/search-icon.png" id="search-link" alt="Search" />
     </div>
-  </body>
+    <div id="search-input" class="right">
+      <input type="input" id="search-input" class="right" value="Search..."/>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div id="content">
+    <section class="project_description">
+      
+      <section class="project_text">
+        <section class="cal-date">
+          <header>
+            <h1>Today</h1>
+          </header>
+        </section>
+        
+        <section class="cal-event">
+          <header>
+            <h1>How to dolor sit amet, consectetur adipiscing</h1>
+          </header>
+          <%- body %>
+        </section>
+
+      </section>
+    </section>
+  </div>
+
+  <div id="sidebar">
+    <div class="sidebar_box">
+      <div class="sidebar_box_title">Neighborhoods</div>
+      <div class="sidebar_box_content">
+        <div class="sidebar_box_text">
+          Autocomplete field of neighborhoods
+        </div>
+      </div>
+    </div>
+    <div class="sidebar_box">
+      <div class="sidebar_box_title">Categories</div>
+      <div class="sidebar_box_content">
+        <div class="sidebar_box_text">
+          <ol>
+            <li>Environment</li>
+            <li>Arts and Culture</li>
+            <li>Public Safety</li>
+            <li>Parks and Recreation</li>
+            <li>Economy and Jobs</li>
+            <li>Education</li>
+            <li>Families and Children</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <!--
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">API</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+    -->
+    <p><span>Created as Open Source by </span><a href="#">Code for America</a><br />
+    “For a more transparent, efficient, and participitory future.”</p>
+    <a href="http://codeforamerica.org" class="footer-logo"><img src="/images/cfa-full-logo.png"></img></a>
+  </div>
+</div>
+</body>
 </html>
