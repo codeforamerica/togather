@@ -115,9 +115,26 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 }
 
 .cal-event { margin:20px 0; }
-    .cal-event h1 { color:#543547; font-weight:bold; font-size:18px; line-height:20px; text-transform: uppercase; margin-bottom:5px; }
-    .cal-whenwhere { color:#99283a; }
-    .cal-description {}
+  .cal-event h1 { color:#543547; font-weight:bold; font-size:18px; line-height:20px; text-transform: uppercase; margin-bottom:5px; }
+  .cal-whenwhere { color:#99283a; }
+  .cal-description {}
+
+.cal-add-button {
+  background: transparent url('../images/cal-add-btn.png') no-repeat top;
+  border:none;
+  width: 320px;
+  height: 62px;
+  margin-bottom: 20px;
+  cursor:pointer;
+  
+  text-transform: uppercase;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+  
+  text-shadow: 0px -1px 0px #999999;
+  filter: dropshadow(color=#999999,offX=0,offY=1);
+}
 
 /* Footer */
 #footer {
@@ -163,82 +180,6 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   color: #999999;
 }
 
-/**
- * Front page styles
- */
-
-.front .content-sidebar {
-  float: right;
-  width: 300px;
-}
-
-.front .content-sidebar h1 {
-  text-transform: uppercase;
-  color: #992739;
-  font-weight: bold;
-  padding-top: 0;
-  margin-bottom: 5px;
-  line-height: 100%;
-}
-
-.front .content-sidebar ul {
-  margin-bottom: 15px;
-}
-
-.front .content-sidebar ul li {
-  color: #96A044;
-  font-weight: bold;
-  font-size: 1.25;
-  padding-bottom: 10px;
-}
-
-a.content-sidebar-link {
-  background-color: #96A044;
-  color: #FFFFFF;
-  display: block;
-  padding: 10px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-/**
- * Home slider
- */
-.home-slider {
-  padding: 0 20px;
-}
-.home-slider .slider-move {
-  width: 40px;
-  height: 40px;
-  float: left;
-  margin-top: 80px;
-  background-color: #FF88C0;
-}
-.home-slider .slider-image {
-  width: 200px;
-  height: 200px;
-  float: left;
-}
-.home-slider .slider-image img {
-  width: 200px;
-  height: 200px;
-  background-color: #FF88C0;
-}
-.home-slider .slider-move-left,
-.home-slider .slider-image {
-  margin-right: 40px;
-}
-.home-slider .slider-image-description {
-  color: #992739;
-  font-size: 1.5em;
-  width: 180px;
-  height: 45px;
-  padding: 10px;
-  display: block;
-  position: relative;
-  top: -65px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
 
 /**
  * Forms
@@ -309,24 +250,4 @@ form .form-item-help img {
   height: 20px;
   background-color: #FF88C0;
   padding-bottom: 20px;
-}
-
-/* Carousel */
-#slide-wrapper {
-  height: 200px;
-  width: 700px;
-  overflow: hidden;
-}
-
-
-.vevent { 
-  padding:10px;
-  margin-bottom:10px;
-  border-bottom: 1px solid #aaa;
-}
-
-.summary { 
-  font-size: 14px; 
-  font-weight:bold; 
-  padding-bottom:5px; 
 }
