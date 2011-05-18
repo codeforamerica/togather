@@ -25,49 +25,49 @@ var storeParam = function(name){
 var dateParam = function(name){  
   return function(val, params, curr){
     var matches,
+        tz,
         floatDateRe =     /^(\d{4})(\d{2})(\d{2})$/,
         floatDateTimeRe = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/,
         utcDateTimeRe =   /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/;
     
     //TZID included, use this to create the date
     if (params && params.length && params[0].indexOf('TZID') !== -1) {
-      time.tzset(params[0].split('=')[1]);
+      tz = params[0].split('=')[1];
+    } else {
+      tz = 'UTC';
     }
+    
+    curr[name] = new time.Date(1900, 1, 0);
+    curr[name].setTimezone(tz);
+    curr[name].setSeconds(0);
     
     if (floatDateRe.test(val)) { //Floating date format
       matches = floatDateRe.exec(val);
       if (matches !== null) {
-        curr[name] = new time.Date(
-          matches[1],
-          parseInt(matches[2], 10)-1,
-          matches[3]
-        );
+        curr[name].setFullYear(matches[1]);
+        curr[name].setMonth(parseInt(matches[2], 10)-1);
+        curr[name].setDate(matches[3]);
       }
     } else if (floatDateTimeRe.test(val)) { //Floating datetime format
       matches = floatDateTimeRe.exec(val);
       if (matches !== null) {
-        curr[name] = new time.Date(
-          matches[1],
-          parseInt(matches[2], 10)-1,
-          matches[3],
-          matches[4],
-          matches[5],
-          matches[6]
-        );
+        curr[name].setFullYear(matches[1]);
+        curr[name].setMonth(parseInt(matches[2], 10)-1);
+        curr[name].setDate(matches[3]);
+        curr[name].setHours(matches[4]);
+        curr[name].setMinutes(matches[5]);
       }      
     } else { //typical RFC date-time format
       matches = utcDateTimeRe.exec(val);
       if (matches !== null) {
-        curr[name] = new Date(Date.UTC(
-          matches[1],
-          parseInt(matches[2], 10)-1,
-          matches[3],
-          matches[4],
-          matches[5],
-          matches[6]
-        ));
+        curr[name].setFullYear(matches[1]);
+        curr[name].setMonth(parseInt(matches[2], 10)-1);
+        curr[name].setDate(matches[3]);
+        curr[name].setHours(matches[4]);
+        curr[name].setMinutes(matches[5]);
       }
     }
+    
     return curr;
   };
 };
@@ -82,6 +82,11 @@ exports.objectHandlers = {
   'END' : function(component, params, curr, par){
     if (curr.uid)
       par[curr.uid] = curr;
+  },
+  
+  'TZID': function(component, params, curr) {
+    console.log(component);
+    console.log(params);
   },
 
   'SUMMARY' : storeParam('summary'),
