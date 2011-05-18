@@ -14,6 +14,7 @@
   "dependencies": {
     "cradle": "0.5.5",
     "ejs": "0.4.2",
-    "express": "2.3.4"
+    "express": "2.3.4",
+    "time": "0.3.1"
   }
 }
