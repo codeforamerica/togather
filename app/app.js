@@ -28,8 +28,16 @@ app.get('/', function(req, res) {
             'title': 'Events Dashboard (hCal)',
             'events': evts
         });
-    });    
+    });
 });
+
+app.get('/add/:url', function(req, res) {
+    events.get(function(evts){
+        res.send('url: ' + req.params.url);
+        events.addUrl(req.params.url);
+    });
+});
+
 
 // Only listen on $ node app.js
 if (!module.parent) {

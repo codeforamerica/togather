@@ -1,4 +1,4 @@
-var ical = require('ical'), 
+var ical = require('./ical'), 
     fs = require('fs'),
     cradle = require('cradle'),
     crypto = require('crypto');
@@ -33,13 +33,13 @@ var saveEvents = function(newEvents, url, callback) {
     }
     
     //Save this document to the database - id, data, callback
-    eventsDb.save(docs, function (err, res) {
-        console.log(res);
-        
+    eventsDb.save(docs, function (err, res) {        
         if (callback) {
             callback(err, res);
         }
-    });    
+        
+        console.log('saved');
+    });
 };
 
 //Get the events we've already stored for this url
@@ -61,7 +61,31 @@ exports.get = function(callback) {
     );
 };
 
-exports.refresh =  function() {
+exports.addUrl = function(url) {
+  eventsDb.destroy(function() {
+      eventsDb.create(function() {
+          eventsDb.save('_design/events', {
+              origin_url: {
+                  map: function (doc) {
+                      emit(doc.origin_url, doc);
+                  }
+              }
+          });
+
+          ical.fromURL(url, {}, function(err, newEvents){
+              newEvents = newEvents || {};
+
+              if (err) {
+                  console.log(err);
+              }
+
+              saveEvents(newEvents, url);
+          });
+      });
+  });
+};
+
+exports.refresh = function() {
     eventsDb.destroy(function() {
         eventsDb.create(function() {
             eventsDb.save('_design/events', {

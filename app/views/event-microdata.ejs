@@ -10,8 +10,8 @@
         </header>
         <div class="cal-whenwhere">
           <span itemprop="location"><%= event.location %></span> at
-          <time itemprop="startDate" datetime="<%= event.start %>">Oct 15, 7:00PM</time>—
-          <time itemprop="endDate" datetime="<%= event.end %>">Oct 15, 9:00PM</time>
+          <time itemprop="startDate" datetime="<%= event.start %>"><%= new Date(Date.parse(event.start)).toString() %></time>—
+          <time itemprop="endDate" datetime="<%= event.end %>"><%= new Date(Date.parse(event.end)).toString() %></time>
         </div>
         <div class="cal-description" itemprop="description"><%= event.description || 'This is a happy little placeholder description.' %></div>
       </section>
