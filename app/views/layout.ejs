@@ -2,14 +2,15 @@
 <html>
   <head>
   <title></title>
-  <link rel="stylesheet" href="stylesheets/style.css" />
+  <link rel="stylesheet" href="togather/css/style.css" />
+  <%- partial('css-includes') %>
   </head>
 
 <body class="main">
   <header id="page-header">
     <a id="title" class="left" href="/">CityCal</a>
     <div id="search-link" class="right nav-links">
-      <img src="/images/search-icon.png" id="search-link" alt="Search" />
+      <img src="togather/css/images/search-icon.png" id="search-link" alt="Search" />
     </div>
     <div id="search-input" class="right">
       <input type="input" id="search-input" class="right" value="Search..."/>
@@ -57,5 +58,7 @@
     “For a more transparent, efficient, and participitory future.”</p>
     <a href="http://codeforamerica.org" class="footer-logo"><img src="/images/cfa-full-logo.png"></img></a>
   </footer>
+  
+  <%- partial('script-includes') %>
 </body>
 </html>

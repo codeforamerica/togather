@@ -46,9 +46,9 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 /* Generic Sidebar Box */
 .sidebar_box {
   border-width: 8px 4px 9px 4px;
-  border-image: url(../images/widget-border.png) 8 4 9 4 stretch;
-  -moz-border-image: url(../images/widget-border.png) 8 4 9 4 stretch;
-  -webkit-border-image: url(../images/widget-border.png) 8 4 9 4 stretch;
+  border-image: url(images/widget-border.png) 8 4 9 4 stretch;
+  -moz-border-image: url(images/widget-border.png) 8 4 9 4 stretch;
+  -webkit-border-image: url(images/widget-border.png) 8 4 9 4 stretch;
   margin-bottom: 20px;
 }
 
@@ -77,9 +77,9 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   width: 900px;
   margin-right:20px;
   border-width: 20px 24px 29px 24px;
-  border-image: url(../images/content-border.png) 20 24 29 24 stretch;
-  -moz-border-image: url(../images/content-border.png) 20 24 29 24 stretch;
-  -webkit-border-image: url(../images/content-border.png) 20 24 29 24 stretch;
+  border-image: url(images/content-border.png) 20 24 29 24 stretch;
+  -moz-border-image: url(images/content-border.png) 20 24 29 24 stretch;
+  -webkit-border-image: url(images/content-border.png) 20 24 29 24 stretch;
   width: 570px;
 }
 
@@ -96,9 +96,9 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   margin-bottom: 1em;
   
   border-width: 0px 0px 10px 0px;
-  -webkit-border-image: url(../images/project-overview-dropshadow.png) 0 0 10 0 stretch;
-  -moz-border-image: url(../images/project-overview-dropshadow.png) 0 0 10 0 stretch;
-  border-image: url(../images/project-overview-dropshadow.png) 0 0 10 0 stretch;
+  -webkit-border-image: url(images/project-overview-dropshadow.png) 0 0 10 0 stretch;
+  -moz-border-image: url(images/project-overview-dropshadow.png) 0 0 10 0 stretch;
+  border-image: url(images/project-overview-dropshadow.png) 0 0 10 0 stretch;
 }
 
 .content-header > * {
@@ -120,7 +120,7 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   .cal-description {}
 
 .cal-add-button {
-  background: transparent url('../images/cal-add-btn.png') no-repeat top;
+  background: transparent url('images/cal-add-btn.png') no-repeat top;
   border:none;
   width: 320px;
   height: 62px;
