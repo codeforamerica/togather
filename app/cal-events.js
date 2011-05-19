@@ -11,7 +11,7 @@ var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database
 var saveEvents = function(newEvents, url, callback) {
     var uid,
         hash,
-        docs = [];
+        eventsArray = [];
 
     for (uid in newEvents) {
         if (newEvents.hasOwnProperty(uid)) {
@@ -28,14 +28,14 @@ var saveEvents = function(newEvents, url, callback) {
             //Add couch id
             newEvents[uid]._id = hash;
             
-            docs.push(newEvents[uid]);
+            eventsArray.push(newEvents[uid]);
         }
     }
     
     //Save this document to the database - id, data, callback
-    eventsDb.save(docs, function (err, res) {        
+    eventsDb.save(eventsArray, function (err, res) {        
         if (callback) {
-            callback(err, res);
+            callback(eventsArray);
         }
         
         console.log('saved');
@@ -45,23 +45,25 @@ var saveEvents = function(newEvents, url, callback) {
 //Get the events we've already stored for this url
 exports.get = function(callback) {
     eventsDb.view('events/origin_url', 
-        function (err, docs) {
-            var i, currentEvents = {};
+        function (err, results) {
+            var i, eventsArray = [];
             
             if (err) {
                 console.log(err);
             } else {
-                for (i=0; i<docs.length; i++) {
-                    currentEvents[docs[i].value.uid] = docs[i].value;
+                for (i=0; i<results.length; i++) {
+                    eventsArray.push(results[i].value);
                 }
             }
             
-            callback(currentEvents);
+            if (callback) {
+              callback(eventsArray);
+            }
         }
     );
 };
 
-exports.addUrl = function(url) {
+exports.addUrl = function(url, callback) {
   eventsDb.destroy(function() {
       eventsDb.create(function() {
           eventsDb.save('_design/events', {
@@ -79,7 +81,11 @@ exports.addUrl = function(url) {
                   console.log(err);
               }
 
-              saveEvents(newEvents, url);
+              saveEvents(newEvents, url, function(eventsArray){
+                if (callback) {
+                  callback(eventsArray);
+                }                
+              });
           });
       });
   });
@@ -111,7 +117,7 @@ exports.refresh = function() {
                             console.log(err);
                         }
 
-                        saveEvents(newEvents, url);
+                        saveEvents(newEvents, url );
                     });
                 }
             });        
