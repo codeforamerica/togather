@@ -119,7 +119,7 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   .cal-whenwhere { color:#99283a; }
   .cal-description {}
 
-.cal-add-button {
+.cal-dialog-open-button {
   background: transparent url('images/cal-add-btn.png') no-repeat top;
   border:none;
   width: 320px;
@@ -178,76 +178,4 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 
 #footer p {
   color: #999999;
-}
-
-
-/**
- * Forms
- */
-form .form-item-wrapper {
-  margin-bottom: 10px;
-}
-
-form .label-wrapper {
-  display: block;
-  height: 20px; 
-  margin-bottom: 10px;
-  margin-top: 5px;
-}
-
-form label {
-  background-color: #E89A41;
-  padding: 5px;
-  font-size: 1.25em;
-  font-weight: bold;
-  color: #FFFFFF;
-  text-transform: uppercase; 
-}
-
-form .textarea,
-form .textfield {
-  border: none;
-  background-color: #AAAAAA;
-  color: #FFFFFF;
-  font-size: 1.25em;
-  padding: 10px;
-  margin-bottom: 15px
-}
-
-
-form .textarea:hover,
-form .textfield:hover,
-form .textarea:focus,
-form .textfield:focus {
-  background-color: #666666;
-}
-
-form .textarea {
-  width: 860px;
-  height: 40px;
-}
-
-form .form-item-help {
-  margin-left: 10px;
-  color: #333333;
-}
-
-form .form-filefield-wrapper {
-  margin-bottom: 20px;
-}
-
-form .submit {
-  background-color: #96A044;
-  padding: 15px;
-  font-size: 1.75em;
-  color: #FFFFFF;
-  border: none;
-  text-transform: uppercase;
-}
-
-form .form-item-help img {
-  width: 20px;
-  height: 20px;
-  background-color: #FF88C0;
-  padding-bottom: 20px;
 }
