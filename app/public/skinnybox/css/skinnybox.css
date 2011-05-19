@@ -5,7 +5,7 @@
   left: 0%;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: #000;
   z-index:1001;
   -moz-opacity: 0.8;
   opacity:.80;
@@ -19,9 +19,9 @@
   left: 25%;
   width: 50%;
   height: 50%;
-  padding: 16px;
-  border: 16px solid orange;
-  background-color: white;
+  padding: 8px;
+  border: 16px solid #999;
+  background-color: #fff;
   z-index:1002;
   overflow: auto;
 }
