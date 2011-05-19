@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title></title>
+  <%- partial('css-includes') %>
+  </head>
+
+<body>  
+  <header id="page-header">
+    <div class="main">
+      <a id="title" class="left" href="/">CityCal</a>
+      <div id="search-link" class="right nav-links">
+        <img src="togather/css/images/search-icon.png" id="search-link" alt="Search" />
+      </div>
+      <div id="search-input" class="right">
+        <input type="input" id="search-input" class="right" value="Search..."/>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <article id="content">
+      <div class="content-inner">      
+        <header class="content-header">
+          <h1>Today</h1>
+        </header>
+
+        <%- body %>
+      </div>
+    </article>
+
+    <aside id="sidebar">
+      <button id="cal-dialog-open-button" class="cal-dialog-open-button">Add an Event</button>
+    
+      <div class="sidebar_box">
+        <div class="sidebar_box_title">Neighborhoods</div>
+        <div class="sidebar_box_content">
+          <%- partial('neighborhoods') %>
+        </div>
+      </div>
+      <div class="sidebar_box">
+        <div class="sidebar_box_title">Categories</div>
+        <div class="sidebar_box_content">
+          <%- partial('categories') %>
+        </div>
+      </div>
+    </aside>
+    <footer id="footer">
+      <!--
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">API</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      -->
+      <p><span>Created as Open Source by </span><a href="#">Code for America</a><br />
+      “For a more transparent, efficient, and participitory future.”</p>
+      <a href="http://codeforamerica.org" class="footer-logo"><img src="togather/css/images/cfa-full-logo.png"></img></a>
+    </footer>
+  </div>
+  
+  <%- partial('script-includes') %>
+</body>
+</html>
