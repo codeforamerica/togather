@@ -42,7 +42,7 @@
       //TODO: make a regex check
       if (url) {
         $.ajax({
-          url: 'add',
+          url: 'parse',
           type: 'GET',
           dataType: 'json',
           data: { url: encodeURIComponent(url) },

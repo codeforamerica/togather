@@ -31,6 +31,13 @@ app.get('/', function(req, res) {
   });
 });
 
+app.get('/parse', function(req, res) {
+  events.parse(decodeURIComponent(req.query.url), function(evts) {
+    res.contentType('application/json');
+    res.send(evts);
+  });
+});
+
 app.get('/add', function(req, res) {
   events.addUrl(decodeURIComponent(req.query.url), function(evts) {
     res.contentType('application/json');

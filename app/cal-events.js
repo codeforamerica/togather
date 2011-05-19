@@ -4,33 +4,12 @@ var ical = require('./ical'),
     crypto = require('crypto');
 
 //Setup the DB connection
-var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events');
+var eventsDb = new (cradle.Connection)('localhost','5984').database('togather_events');
 
 //Saves new events to the database. This will create events if
 //they don't exist or replace them if they do.
-var saveEvents = function(newEvents, url, callback) {
-    var uid,
-        hash,
-        eventsArray = [];
-
-    for (uid in newEvents) {
-        if (newEvents.hasOwnProperty(uid)) {
-            //Create a hash of the UID to make it easier to look up
-            //records from the database.
-            hash = crypto.createHash('md5').update(uid).digest('hex');
-            
-            //Add origin url
-            newEvents[uid].origin_url = url;
-            
-            //Add sync time
-            newEvents[uid].synced_on = new Date();
-            
-            //Add couch id
-            newEvents[uid]._id = hash;
-            
-            eventsArray.push(newEvents[uid]);
-        }
-    }
+var save = function(newEvents, url, callback) {
+    var eventsArray = exports.parse(newEvents);
     
     //Save this document to the database - id, data, callback
     eventsDb.save(eventsArray, function (err, res) {        
@@ -41,6 +20,8 @@ var saveEvents = function(newEvents, url, callback) {
         console.log('saved');
     });
 };
+
+
 
 //Get the events we've already stored for this url
 exports.get = function(callback) {
@@ -63,31 +44,64 @@ exports.get = function(callback) {
     );
 };
 
+exports.parse = function(url, callback) {
+  ical.fromURL(url, {}, function(err, newEvents){
+    var uid,
+        hash,
+        eventsArray = [];
+
+    newEvents = newEvents || {};
+
+    if (err) {
+      console.log(err);
+    }
+
+    for (uid in newEvents) {
+      if (newEvents.hasOwnProperty(uid)) {
+        //Create a hash of the UID to make it easier to look up
+        //records from the database.
+        hash = crypto.createHash('md5').update(uid).digest('hex');
+        
+        //Add origin url
+        newEvents[uid].origin_url = url;
+        
+        //Add sync time
+        newEvents[uid].synced_on = new Date();
+        
+        //Add couch id
+        newEvents[uid]._id = hash;
+        
+        eventsArray.push(newEvents[uid]);
+      }
+    }
+    
+    if (callback) {
+      callback(eventsArray);
+    }
+  });
+};
+
+/*
 exports.addUrl = function(url, callback) {
   eventsDb.destroy(function() {
-      eventsDb.create(function() {
-          eventsDb.save('_design/events', {
-              origin_url: {
-                  map: function (doc) {
-                      emit(doc.origin_url, doc);
-                  }
-              }
-          });
+    eventsDb.create(function() {
 
-          ical.fromURL(url, {}, function(err, newEvents){
-              newEvents = newEvents || {};
-
-              if (err) {
-                  console.log(err);
-              }
-
-              saveEvents(newEvents, url, function(eventsArray){
-                if (callback) {
-                  callback(eventsArray);
-                }                
-              });
-          });
+      eventsDb.save('_design/events', {
+        origin_url: {
+          map: function (doc) {
+              emit(doc.origin_url, doc);
+          }
+        }
       });
+
+      exports.parse(url, function(newEvents) {
+        save(newEvents, url, function(eventsArray){
+          if (callback) {
+            callback(eventsArray);
+          }                
+        });
+      });
+    });
   });
 };
 
@@ -117,10 +131,11 @@ exports.refresh = function() {
                             console.log(err);
                         }
 
-                        saveEvents(newEvents, url );
+                        save(newEvents, url );
                     });
                 }
             });        
         });
     });
 };
+*/
