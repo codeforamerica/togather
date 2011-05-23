@@ -45,6 +45,13 @@ app.get('/add', function(req, res) {
   });
 });
 
+app.post('/save', function(req, res) {
+  events.save(JSON.parse(req.body.events), function(evts) {
+    res.contentType('application/json');
+    res.send(evts);
+  });
+});
+
 
 // Only listen on $ node app.js
 if (!module.parent) {
