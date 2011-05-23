@@ -115,7 +115,7 @@ exports.parse = function(html, callback) {
       //when
       startDate: result.startDate,
       endDate: result.endDate,
-      tzOffset: -5, //eastern for now
+      tzOffset: -4, //EDT
       //where
       streetAddress: result.locality.address['street-address'],
       city: result.locality.address.locality
