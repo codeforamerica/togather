@@ -1,21 +1,21 @@
-var ical = require('./ijp-0.5'), 
+var ical = require('./ical'), 
     md = require('./microdata-event'),
     fs = require('fs'),
     cradle = require('cradle'),
     crypto = require('crypto');
 
 //Setup the DB connection
-var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events');
+var eventsDb = new (cradle.Connection)('localhost','5984').database('togather_events');
 
 //Saves new events to the database. This will create events if
 //they don't exist or replace them if they do.
-var save = function(newEvents, url, callback) {
-    var eventsArray = exports.parse(newEvents);
+exports.save = function(events, callback) {    
+    console.log(events);
     
     //Save this document to the database - id, data, callback
-    eventsDb.save(eventsArray, function (err, res) {        
+    eventsDb.save(events, function (err, res) {        
         if (callback) {
-            callback(eventsArray);
+            callback(events);
         }
         
         console.log('saved');
@@ -129,7 +129,7 @@ exports.resetDb = function() {
 
 exports.addUrl = function(url, callback) {
   exports.parseMicrodata(url, function(newEvents) {
-    save(newEvents, url, function(eventsArray){
+    exports.save(newEvents, function(eventsArray){
       if (callback) {
         callback(eventsArray);
       }                
