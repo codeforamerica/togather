@@ -1,6 +1,7 @@
 var $ = require('jquery'),
     request = require('request'),
-    util = require('util');
+    util = require('util'),
+    time = require('time');
 
 var specs = {
     // null spec means to just use the element value
@@ -9,7 +10,7 @@ var specs = {
     'url': { attributes: ['href'] },
     'location': null,
     'description': null,
-    'startDate': { required: true, attributes: ['datetime'] },
+    'startDate': { attributes: ['datetime'] },
       'dtstart': { alias: 'startDate' },
     'endDate': { attributes: ['datetime'] },
       'dtend': { alias: 'endDate' },
@@ -106,8 +107,22 @@ exports.fromUrl = function(url, callback) {
 
 exports.parse = function(html, callback) {
   //Get the roots - itemscopes that are not also itemprops
-  var results = parseItemScope($('[itemscope]:not([itemprop])', html), 1);
+  var result = parseItemScope($('[itemscope]:not([itemprop])', html), 1),
+    standardResult = {
+      //what
+      summary: result.summary,
+      description: result.description,
+      //when
+      startDate: result.startDate,
+      tzOffset: -5, //eastern for now
+      //where
+      streetAddress: result.locality.address['street-address'],
+      city: result.locality.address.locality
+    };
+  
+  console.log(standardResult);
+  
   if (callback) {
-    callback(results);
+    callback(standardResult);
   }
 };
