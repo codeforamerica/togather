@@ -9,13 +9,11 @@ var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database
 
 //Saves new events to the database. This will create events if
 //they don't exist or replace them if they do.
-var save = function(newEvents, url, callback) {
-    var eventsArray = exports.parse(newEvents);
-    
+exports.save = function(events, callback) {    
     //Save this document to the database - id, data, callback
-    eventsDb.save(eventsArray, function (err, res) {        
+    eventsDb.save(events, function (err, res) {        
         if (callback) {
-            callback(eventsArray);
+            callback(events);
         }
         
         console.log('saved');
@@ -23,7 +21,7 @@ var save = function(newEvents, url, callback) {
 };
 
 var sortByStart = function(a, b) {
-  return (a.start.milliseconds - b.start.milliseconds);
+  return (a.startDate.milliseconds - b.startDate.milliseconds);
 };
 
 //Get the events we've already stored for this url
@@ -35,10 +33,7 @@ exports.get = function(callback) {
             if (err) {
                 console.log(err);
             } else {
-                for (i=0; i<results.length; i++) {
-                  results[i].value.start = new Date(Date.parse(results[i].value.start));
-                  results[i].value.end = new Date(Date.parse(results[i].value.end));
-                                    
+                for (i=0; i<results.length; i++) {                                    
                   eventsArray.push(results[i].value);
                 }
                 
@@ -129,7 +124,7 @@ exports.resetDb = function() {
 
 exports.addUrl = function(url, callback) {
   exports.parseMicrodata(url, function(newEvents) {
-    save(newEvents, url, function(eventsArray){
+    exports.save(newEvents, function(eventsArray){
       if (callback) {
         callback(eventsArray);
       }                

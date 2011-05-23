@@ -3,16 +3,23 @@
       options = {
         openDialogButtonId: 'cal-dialog-open-button',
         closeDialogButtonId: 'cal-dialog-close-button',
-        addUrlButtonId: 'cal-add-button',
-        addUrlInputId: 'cal-add-input',
+        previewButtonId: 'cal-preview-button',
+        previewInputId: 'cal-preview-input',
+        saveButtonId: 'cal-save-button',
         overlayId: 'cal-overlay',
         boxId: 'cal-box'
       },
       sb,
       eventEjs = new EJS({url: 'views/event-microdata.ejs'}),
-      $box = $('#' + options.boxId);
+      $box = $('#' + options.boxId),
+      $saveButton,
+      events = [];
     
-  var refresh = function(events) {
+  var refresh = function() {
+    console.log($saveButton);
+    
+    $saveButton.show();
+    
     $('#cal-add-preview').html(eventEjs.render( {events: [events[0]]} ));
   };
   
@@ -36,8 +43,8 @@
       self.open();
     });
     
-    $('#' + options.addUrlButtonId).click(function() {
-      var url = $('#' + options.addUrlInputId).val();
+    $('#' + options.previewButtonId).click(function() {
+      var url = $('#' + options.previewInputId).val();
       
       //TODO: make a regex check
       if (url) {
@@ -48,8 +55,8 @@
           data: { url: encodeURIComponent(url) },
           success: function(data, textStatus, jqXHR) {
             console.log(data);
-            
-            refresh(data);
+            events = data;
+            refresh();
             
             //self.close();
           },
@@ -59,19 +66,39 @@
         });
       }
     });
+    
+    $saveButton.click(function() {
+      $.ajax({
+        url: 'save',
+        type: 'POST',
+        dataType: 'json',
+        data: { events: JSON.stringify(events) },
+        success: function(data, textStatus, jqXHR) {
+          console.log(data);
+          
+          //self.close();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown);
+        }
+      });
+    });
   };
   
   var init = function() {
     $('<div id="cal-overlay" class="skinny-overlay"></div>' + 
       '<div id="cal-box" class="skinny-box"><header><h2>Enter the URL for your event:</h2></header>' + 
-      '<section><input type="text" id="cal-add-input" value="" /><button id="cal-add-button">Add</button></section>' + 
+      '<section><input type="text" id="cal-preview-input" value="" /><button id="cal-preview-button">Preview</button></section>' + 
       '<section id="cal-add-preview"></section>' + 
-      '<footer><button id="'+options.closeDialogButtonId+'">close!</button><footer></div>').appendTo('body');
+      '<button id="cal-save-button">Save</button>' + 
+      '<footer><button id="'+options.closeDialogButtonId+'">Close</button><footer></div>').appendTo('body');
     
     sb = skinnybox({
       overlay: options.overlayId, 
       box: options.boxId
     });
+    
+    $saveButton = $('#' + options.saveButtonId);
       
     bindEvents();
   };
