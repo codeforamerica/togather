@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/parse', function(req, res) {
-  events.parse(decodeURIComponent(req.query.url), function(evts) {
+  events.parseMicrodata(decodeURIComponent(req.query.url), function(evts) {
     res.contentType('application/json');
     res.send(evts);
   });

@@ -1,4 +1,5 @@
-var ical = require('./ical'), 
+var ical = require('./ijp-0.5'), 
+    md = require('./microdata-event'),
     fs = require('fs'),
     cradle = require('cradle'),
     crypto = require('crypto');
@@ -21,7 +22,9 @@ var save = function(newEvents, url, callback) {
     });
 };
 
-
+var sortByStart = function(a, b) {
+  return (a.start.milliseconds - b.start.milliseconds);
+};
 
 //Get the events we've already stored for this url
 exports.get = function(callback) {
@@ -33,8 +36,13 @@ exports.get = function(callback) {
                 console.log(err);
             } else {
                 for (i=0; i<results.length; i++) {
-                    eventsArray.push(results[i].value);
+                  results[i].value.start = new Date(Date.parse(results[i].value.start));
+                  results[i].value.end = new Date(Date.parse(results[i].value.end));
+                                    
+                  eventsArray.push(results[i].value);
                 }
+                
+                eventsArray.sort(sortByStart);
             }
             
             if (callback) {
@@ -44,7 +52,7 @@ exports.get = function(callback) {
     );
 };
 
-exports.parse = function(url, callback) {
+exports.parseIcs = function(url, callback) {
   ical.fromURL(url, {}, function(err, newEvents){
     var uid,
         hash,
@@ -75,36 +83,62 @@ exports.parse = function(url, callback) {
       }
     }
     
+    eventsArray.sort(sortByStart);
+    
     if (callback) {
       callback(eventsArray);
     }
   });
 };
 
-/*
-exports.addUrl = function(url, callback) {
+exports.parseMicrodata = function(url, callback) {
+  md.fromUrl(url, function(evt){
+    //Create a hash of the UID to make it easier to look up
+    //records from the database.
+    var hash = crypto.createHash('md5').update(url).digest('hex');
+    
+    //Add origin url
+    evt.origin_url = url;
+    
+    //Add sync time
+    evt.synced_on = new Date();
+    
+    //Add couch id
+    evt._id = hash;
+    
+    if (callback) {
+      callback([evt]);
+    }
+  });
+};
+
+exports.resetDb = function() {
   eventsDb.destroy(function() {
     eventsDb.create(function() {
-
       eventsDb.save('_design/events', {
         origin_url: {
           map: function (doc) {
-              emit(doc.origin_url, doc);
+            emit(doc.origin_url, doc);
           }
         }
-      });
-
-      exports.parse(url, function(newEvents) {
-        save(newEvents, url, function(eventsArray){
-          if (callback) {
-            callback(eventsArray);
-          }                
-        });
       });
     });
   });
 };
 
+
+exports.addUrl = function(url, callback) {
+  exports.parseMicrodata(url, function(newEvents) {
+    save(newEvents, url, function(eventsArray){
+      if (callback) {
+        callback(eventsArray);
+      }                
+    });
+  });
+};
+
+
+/*
 exports.refresh = function() {
     eventsDb.destroy(function() {
         eventsDb.create(function() {
