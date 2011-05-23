@@ -112,13 +112,14 @@ exports.parse = function(html, callback) {
       //what
       summary: result.summary,
       description: result.description,
+      url: result.url,
       //when
       startDate: result.startDate,
       endDate: result.endDate,
       tzOffset: -4, //EDT
       //where
-      streetAddress: result.locality.address['street-address'],
-      city: result.locality.address.locality
+      streetAddress: (result && result.locality) ? result.locality.address['street-address'] : null,
+      city: (result && result.locality) ? result.locality.address.locality : null
     };
   
   console.log(standardResult);
