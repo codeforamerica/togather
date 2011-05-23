@@ -1,16 +1,19 @@
 <% 
-  var i, event;
+  var i, event, startDate, timeStr;
   for (i=0; i<events.length; i++) {
     event = events[i];
+    
+    console.log(event);
+    
 %>
     <section class="cal-event" itemscope itemtype="http://data-vocabulary.org/Event">
       <header>
         <h1 itemprop="summary"><%= event.summary %></h1>
       </header>
       <div class="cal-whenwhere">
-        <span itemprop="location"><%= event.location %></span> at
-        <time itemprop="startDate" datetime="<%= event.start %>"><%= new Date(Date.parse(event.startDate)).toLocaleString() %></time>
-        <!-- -<time itemprop="endDate" datetime="<%= event.end %>"><%= new Date(Date.parse(event.end)).toLocaleString() %></time>-->
+        <span itemprop="location"><%= event.streetAddress %></span>
+        <time itemprop="startDate" datetime="<%= event.startDate %>"><%= new Date(Date.parse(event.startDate)).toString('h:mm tt') %></time>
+        <!-- -<time itemprop="endDate" datetime="<%= event.end %>"><%= new Date(Date.parse(event.end)).toLocaleTimeString() %></time>-->
       </div>
       <!--<div class="cal-description" itemprop="description"><%= event.description || 'This is a happy little placeholder description.' %></div>-->
     </section>
