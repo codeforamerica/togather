@@ -31,6 +31,7 @@ app.get('/', function(req, res) {
   });
 });
 
+//Parses out an event from a url
 app.get('/parse', function(req, res) {
   events.parseMicrodata(decodeURIComponent(req.query.url), function(evts) {
     res.contentType('application/json');
@@ -45,6 +46,7 @@ app.get('/add', function(req, res) {
   });
 });
 
+//Saves an array of events
 app.post('/save', function(req, res) {
   events.save(JSON.parse(req.body.events), function(evts) {
     res.contentType('application/json');
