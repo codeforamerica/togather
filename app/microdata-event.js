@@ -2,48 +2,109 @@ var $ = require('jquery'),
     request = require('request'),
     util = require('util');
 
-var results = [],
-  specs = {
-    itemtype: 'http://data-vocabulary.org/Event',
-    children: {
-      summary: '',
-      url: '',
-      location: '',
-      description: '',
-      startDate: 'datetime',
-      endDate: 'datetime',
-      duration: '',
-      eventType: '',
-      geo: '',
-      photo: 'src'
-    }
-  
+var specs = {
+    // null spec means to just use the element value
+    //'data-vocabulary.org/Event'
+    'summary': null,
+    'url': { attributes: ['href'] },
+    'location': null,
+    'description': null,
+    'startDate': { required: true, attributes: ['datetime'] },
+      'dtstart': { alias: 'startDate' },
+    'endDate': { attributes: ['datetime'] },
+      'dtend': { alias: 'endDate' },
+    'duration': null,
+    'eventType': null,
+      'category': { alias: 'eventType'},
+    'geo': { elements: ['latitude', 'longitude'] },
+    'photo': { attributes: ['src'] },
+    //'data-vocabulary.org/Organization'
+    'name': null,
+      'fn': { alias: 'name' },
+      'org': { alias: 'name' },
+    'url': { attributes: ['href'] },
+    //'address': { elements: ['street-address', 'locality', 'region', 'postal-code', 'country-name']},
+      'adr': { alias: 'address' },
+    'tel': null,
+    //'geo': { elements: ['latitude', 'longitude'] },
+    //'data-vocabulary.org/Address'
+    'street-address': null, 
+      'stress-address': { alias: 'street-address'},
+    'locality': null, 
+    'region': null, 
+    'postal-code': null, 
+    'country-name': null
   };
 
-var parse = function(itemscope) {
-  var results =  {};
-  console.log('');
+var parseItemProp = function($itemprop, $itemscope) {
+  var propName = $itemprop.attr('itemprop'),
+      spec = specs[propName],
+      itemResults = {};
+
+  //This is just an alias, get the real spec
+  if (spec && spec.alias) {
+    propName = spec.alias;
+    spec = specs[propName];
+  }
   
-  $('[itemprop]', itemscope).each(function(j, itemprop) {
-    var $itemprop = $(itemprop);
-    
-    if ($itemprop.is('[itemscope]')) {
-      console.log($itemprop.attr('itemprop') + ' is also an itemscope!');
-      results[$itemprop.attr('itemprop')] = parse($itemprop);
-    } else {
-      console.log('Saving ' + $itemprop.attr('itemprop'));        
-      results[$itemprop.attr('itemprop')] = $itemprop.text();
+  if (spec) {
+    if (spec.attributes) {
+      $.each(spec.attributes, function(i, attr) {
+        itemResults.val = $itemprop.attr(attr);
+        
+        if (itemResults.val) {
+          //Break out of the loop
+          return false;
+        }
+      });
+    } else if (spec.elements) {
+      console.log('elements is not yet supported.');
     }
-    console.log(util.inspect(results, true, 2));
+  } else {
+    //console.log('default spec for ' + propName);
+    itemResults.val = $itemprop.text();
+  }
+  itemResults.key = propName;
+  
+  return itemResults;
+};
+
+var parseItemScope = function($itemscope, depth) {
+  var scopeResults = {};
+  
+  //This will get every itemprop in this scope, regardless of nesting
+  $('[itemprop]', $itemscope).each(function(j, itemprop) {
+    var $itemprop = $(itemprop),
+      itemResults;
+
+    //Enforce nesting - the number of itemscope parents is the depth
+    //of the nesting.
+    if (depth === $itemprop.parents('[itemscope]').length) {
+      //This itemprop is also an itemscope so go parse its children
+      if ($itemprop.is('[itemscope]')) {
+        //console.log($itemprop.attr('itemprop') + ' is also an itemscope!');
+        scopeResults[$itemprop.attr('itemprop')] = parseItemScope($itemprop, depth+1);
+        //console.log('Saving itemscope ' + $itemprop.attr('itemprop'));      
+      } else {
+        //console.log('Saving ' + $itemprop.attr('itemprop'));
+        itemResults = parseItemProp($itemprop, $itemscope);
+        scopeResults[itemResults.key] = itemResults.val;
+      }
+    }
+
+    //console.log('depth: ' + depth);
+    //console.log(util.inspect(scopeResults, true, 2));
   });
 
-  return results;  
+  //console.log('returning ' + util.inspect(scopeResults, true, 2));
+  return scopeResults;  
 };
 
 exports.parse = function(url, callback) { 
   request({uri:url}, function(err, r, html) {
-    var tada = parse($('[itemscope]:not([itemprop])', html));
-    console.log('final!');
+    var $itemscope = $('[itemscope]:not([itemprop])', html);
+    var tada = parseItemScope($itemscope, 1);
+    //console.log('final!');
     console.log(tada);
   });
 };
