@@ -76,7 +76,7 @@
         success: function(data, textStatus, jqXHR) {
           console.log(data);
           
-          //self.close();
+          location.reload();
         },
         error: function(jqXHR, textStatus, errorThrown) {
           console.log(errorThrown);
