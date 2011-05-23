@@ -16,7 +16,7 @@ var specs = {
     'duration': null,
     'eventType': null,
       'category': { alias: 'eventType'},
-    'geo': { elements: ['latitude', 'longitude'] },
+    //'geo': { elements: ['latitude', 'longitude'] },
     'photo': { attributes: ['src'] },
     //'data-vocabulary.org/Organization'
     'name': null,
@@ -29,7 +29,7 @@ var specs = {
     //'geo': { elements: ['latitude', 'longitude'] },
     //'data-vocabulary.org/Address'
     'street-address': null, 
-      'stress-address': { alias: 'street-address'},
+      'stress-address': { alias: 'street-address'}, //Craziness from Meetup.com
     'locality': null, 
     'region': null, 
     'postal-code': null, 
@@ -57,8 +57,6 @@ var parseItemProp = function($itemprop, $itemscope) {
           return false;
         }
       });
-    } else if (spec.elements) {
-      console.log('elements is not yet supported.');
     }
   } else {
     //console.log('default spec for ' + propName);
@@ -100,11 +98,16 @@ var parseItemScope = function($itemscope, depth) {
   return scopeResults;  
 };
 
-exports.parse = function(url, callback) { 
+exports.fromUrl = function(url, callback) { 
   request({uri:url}, function(err, r, html) {
-    var $itemscope = $('[itemscope]:not([itemprop])', html);
-    var tada = parseItemScope($itemscope, 1);
-    //console.log('final!');
-    console.log(tada);
+    exports.parse(html, callback);
   });
+};
+
+exports.parse = function(html, callback) {
+  //Get the roots - itemscopes that are not also itemprops
+  var results = parseItemScope($('[itemscope]:not([itemprop])', html), 1);
+  if (callback) {
+    callback(results);
+  }
 };
