@@ -11,11 +11,29 @@
         <h1 itemprop="summary"><%= event.summary %></h1>
       </header>
       <div class="cal-whenwhere">
-        <span itemprop="location"><%= event.streetAddress %></span>
-        <time itemprop="startDate" datetime="<%= event.startDate %>"><%= new Date(Date.parse(event.startDate)).toString('h:mm tt') %></time>
-        <!-- -<time itemprop="endDate" datetime="<%= event.end %>"><%= new Date(Date.parse(event.end)).toLocaleTimeString() %></time>-->
+        <span class="when">
+          <img src="./togather/css/images/clock-icon.png"></img>
+          <time itemprop="startDate" datetime="<%= event.startDate %>"><%= new Date(Date.parse(event.startDate)).toLocaleTimeString() %></time>
+          -
+          <time itemprop="endDate" datetime="<%= event.endDate %>"><%= new Date(Date.parse(event.endDate)).toLocaleTimeString() %></time>
+        </span>
+        <span class="where">
+          <img src="./togather/css/images/pin-icon.png"></img>
+          <span itemprop="location"><%= event.streetAddress %></span>
+        </span>
       </div>
-      <!--<div class="cal-description" itemprop="description"><%= event.description || 'This is a happy little placeholder description.' %></div>-->
+      <div class="cal-description" itemprop="description">
+        <% if (event.description) { %>
+          <% if (event.description.length > 190) { %> 
+            <%= event.description.substr(0,190) + "..." %>
+            <a href="#" class="read-more">Read More</a>
+          <% } else { %>
+            <%= event.description %>
+          <% } %>
+        <% } else { %>
+          <%= "This event doesn't have a description." %>
+        <% } %>
+      </div>
     </section>
 <%
   }

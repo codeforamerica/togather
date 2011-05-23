@@ -81,6 +81,7 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   -moz-border-image: url(images/content-border.png) 20 24 29 24 stretch;
   -webkit-border-image: url(images/content-border.png) 20 24 29 24 stretch;
   width: 570px;
+  padding-bottom: 10px;
 }
 
 .content-inner {
@@ -115,9 +116,26 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 }
 
 .cal-event { margin:20px 0; }
-  .cal-event h1 { color:#543547; font-weight:bold; font-size:18px; line-height:20px; text-transform: uppercase; margin-bottom:5px; }
-  .cal-whenwhere { color:#99283a; }
-  .cal-description {}
+  .cal-event h1 { 
+    color:#543547; font-weight:bold; font-size:18px; line-height:20px; text-transform: uppercase; margin-bottom:5px; clear: both; padding-top:10px; }
+  .cal-whenwhere {
+    color:#99283a;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .cal-description {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .cal-description .read-more {
+    background-color: #96a044;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 5px 10px 5px 10px;
+    float: right;
+    margin-top: 10px;
+  }
 
 .cal-dialog-open-button {
   background: transparent url('images/cal-add-btn.png') no-repeat top;

@@ -1,4 +1,4 @@
-var ical = require('./ijp-0.5'), 
+var ical = require('./ical'), 
     md = require('./microdata-event'),
     fs = require('fs'),
     cradle = require('cradle'),
