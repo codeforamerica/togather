@@ -1,2 +1,41 @@
-#cal-box footer { position:absolute; bottom:8px; }
+#cal-box footer { position:absolute; bottom:20px; right:20px; }
+  #cal-box h2 { margin:0; }
+  #cal-box .read-more { display:none; }
+  #cal-box .cal-event { margin:0; }
 #cal-save-button { display:none; }
+
+.preview-input-container { position:relative; height:50px; } 
+  .preview-input-container #cal-preview-input { position:absolute; left:0; right:90px; }
+  .preview-input-container #cal-preview-button { position:absolute; top:10px; right:0; }
+
+.skinny-overlay{
+  display: none;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index:1001;
+  -moz-opacity: 0.8;
+  opacity:.80;
+  filter: alpha(opacity=80);
+}
+
+.skinny-box {
+  display: none;
+  position: fixed;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  padding: 25px;
+  border: 1px solid #666;
+  background-color: #fff;
+  z-index:1002;
+  overflow: auto;
+  
+  -webkit-box-shadow: 2px 4px 8px #000;
+  -moz-box-shadow: 2px 4px 8px #000;
+  box-shadow: 2px 4px 8px #000;
+}
