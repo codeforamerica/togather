@@ -10,21 +10,18 @@
         boxId: 'cal-box'
       },
       sb,
-      eventEjs = new EJS({url: 'views/event-microdata.ejs'}),
+      eventEjs = new EJS({url: 'views/event.ejs'}),
       $box = $('#' + options.boxId),
       $saveButton,
       events = [];
     
   var refresh = function() {
-    console.log($saveButton);
-    
     $saveButton.show();
     
-    $('#cal-add-preview').html(eventEjs.render( {events: [events[0]]} ));
+    $('#cal-add-preview').html(eventEjs.render( {'event': events[0] } ));
   };
   
   self.close = function() {
-    console.log('close!');
     sb.close();
   };
   
