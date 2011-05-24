@@ -1,0 +1,30 @@
+<section class="cal-event" itemscope itemtype="http://data-vocabulary.org/Event">
+  <header>
+    <h1 itemprop="summary"><%= event.summary %></h1>
+  </header>
+  <div class="cal-whenwhere">
+    <span class="when">
+      <img src="./togather/css/images/clock-icon.png"></img>
+      <time itemprop="startDate" datetime="<%= event.startDate %>"><%= new Date(Date.parse(event.startDate)).toLocaleTimeString() %></time>
+      -
+      <time itemprop="endDate" datetime="<%= event.endDate %>"><%= new Date(Date.parse(event.endDate)).toLocaleTimeString() %></time>
+    </span>
+    <span class="where">
+      <img src="./togather/css/images/pin-icon.png"></img>
+      <span itemprop="location"><%= event.streetAddress %></span>
+    </span>
+  </div>
+  <div class="cal-description" itemprop="description">
+    <% if (event.description) { %>
+      <% if (event.description.length > 190) { %> 
+        <%= event.description.substr(0,190) + "..." %>
+      <% } else { %>
+        <%= event.description %>
+      <% } %>
+    <% } else { %>
+      <%= "This event doesn't have a description." %>
+    <% } %>
+    <a href="#" class="read-more">Read More</a>
+  </div>
+</section>
+

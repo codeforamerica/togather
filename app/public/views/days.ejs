@@ -1,0 +1,15 @@
+<header class="content-header">
+  <h1>Today</h1>
+</header>
+  <%- partial('events', {events: groups.today}) %>
+
+<header class="content-header">
+  <h1>Tomorrow</h1>
+</header>
+  <%- partial('events', {events: groups.tomorrow}) %>
+
+<header class="content-header">
+  <h1>Upcoming</h1>
+</header>
+  <%- partial('events', {events: groups.future}) %>
+

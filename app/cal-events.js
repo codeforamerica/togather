@@ -47,6 +47,60 @@ exports.get = function(callback) {
     );
 };
 
+// Gets the events sorted into groups by day
+exports.getByDay = function(callback) {
+    exports.get(function(events) {
+        var groups, i, today, eventDate, todayStart, todayEnd, tomorrowStart, tomorrowEnd;
+
+        groups = {
+            today: [],
+            tomorrow: [],
+            future: []
+        };
+
+        today = new Date();
+        for ( i=0; i < events.length; i++) {
+          event = events[i];
+
+          eventDate = new Date(event.startDate);
+
+          todayStart = new Date();
+          todayStart.setHours(0);
+          todayStart.setMinutes(0);
+          todayStart.setSeconds(0);
+
+          todayEnd = new Date();
+          todayEnd.setHours(23);
+          todayEnd.setMinutes(59);
+          todayEnd.setSeconds(59);
+
+          tomorrowStart = new Date();
+          tomorrowStart.setDate(tomorrowStart.getDate() + 1);
+          tomorrowStart.setHours(0);
+          tomorrowStart.setMinutes(0);
+          tomorrowStart.setSeconds(0);
+
+          tomorrowEnd = new Date();
+          tomorrowEnd.setDate(tomorrowEnd.getDate() + 1);
+          tomorrowEnd.setHours(23);
+          tomorrowEnd.setMinutes(59);
+          tomorrowEnd.setSeconds(59);
+
+          if (eventDate >= todayStart && eventDate <= todayEnd) {
+            groups.today.push(event);
+          } else {
+            if (eventDate >= tomorrowStart && eventDate <= tomorrowEnd) {
+              groups.tomorrow.push(event);
+            } else {
+              groups.future.push(event);
+            }
+          }
+        }
+
+        callback(groups);
+    });
+};
+
 exports.parseIcs = function(url, callback) {
   ical.fromURL(url, {}, function(err, newEvents){
     var uid,

@@ -1,0 +1,11 @@
+<% 
+  var i, event, startDate, timeStr;
+  for (i=0; i<events.length; i++) {
+    event = events[i];
+%>
+
+<%- partial('event',{object:event}) %>
+
+<%
+  }
+%>
