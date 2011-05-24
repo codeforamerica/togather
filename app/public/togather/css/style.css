@@ -130,6 +130,7 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
   .cal-description .read-more {
     background-color: #96a044;
     color: #ffffff;
+    font-size:11px;
     text-transform: uppercase;
     font-weight: bold;
     padding: 5px 10px 5px 10px;
@@ -196,4 +197,36 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 
 #footer p {
   color: #999999;
+}
+
+button {
+  background-color: #96a044;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-size:11px;
+  font-weight: bold;
+  padding: 5px 10px 5px 10px;
+  margin: 0 5px;
+  border:none;
+  cursor:pointer;
+}
+
+.textarea,
+.textfield,
+.password {
+    border: none;
+    background-color: #AAAAAA;
+    color: #FFFFFF;
+    font-size: 1.25em;
+    padding: 10px;
+    margin-bottom: 15px
+}
+
+.textarea:hover,
+.textfield:hover,
+.password:hover,
+.textarea:focus,
+.textarea:focus,
+.password:focus {
+    background-color: #666666;
 }

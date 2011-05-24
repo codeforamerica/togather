@@ -87,11 +87,12 @@
   
   var init = function() {
     $('<div id="cal-overlay" class="skinny-overlay"></div>' + 
-      '<div id="cal-box" class="skinny-box"><header><h2>Enter the URL for your event:</h2></header>' + 
-      '<section><input type="text" id="cal-preview-input" value="" /><button id="cal-preview-button">Preview</button></section>' + 
+      '<div id="cal-box" class="skinny-box"><header><h2>Enter the URL for your event</h2></header>' + 
+      '<section class="preview-input-container"><input type="text" id="'+options.previewInputId+'" class="textfield" value="" />' + 
+      '<button id="'+options.previewButtonId+'">Preview</button></section>' + 
       '<section id="cal-add-preview"></section>' + 
-      '<button id="cal-save-button">Save</button>' + 
-      '<footer><button id="'+options.closeDialogButtonId+'">Close</button><footer></div>').appendTo('body');
+      '<footer><button id="'+options.saveButtonId+'">Save</button>' +
+      '<a id="'+options.closeDialogButtonId+'" href="javascript:void(0);">Close</a></footer></div>').appendTo('body');
     
     sb = skinnybox({
       overlay: options.overlayId, 

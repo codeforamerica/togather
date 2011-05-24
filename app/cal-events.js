@@ -1,6 +1,9 @@
 var ical = require('./ical'), 
     md = require('./microdata-event'),
+    auth = require('./settings/auth'),
     fs = require('fs'),
+    SimpleGeo = require('simplegeo-client').SimpleGeo,
+    sg = new SimpleGeo(auth.simplegeo.key, auth.simplegeo.secret),
     cradle = require('cradle'),
     crypto = require('crypto');
 
@@ -141,7 +144,7 @@ exports.parseIcs = function(url, callback) {
 };
 
 exports.parseMicrodata = function(url, callback) {
-  md.fromUrl(url, function(evt){
+  md.fromUrl(url, function(err, evt) {
     //Create a hash of the UID to make it easier to look up
     //records from the database.
     var hash = crypto.createHash('md5').update(url).digest('hex');
@@ -149,14 +152,52 @@ exports.parseMicrodata = function(url, callback) {
     //Add origin url
     evt.origin_url = url;
     
+    //Set the url if it doesn't exist
+    evt.url = evt.url || url;
+        
     //Add sync time
     evt.synced_on = new Date();
     
     //Add couch id
     evt._id = hash;
     
-    if (callback) {
-      callback([evt]);
+    //Extract the TZ and Neighborhood, if we have any location data
+    if (evt.streetAddress && evt.city) {
+      
+      //Query SimpleGeo for the context data
+      sg.getContextByAddress(evt.streetAddress + ' ' + evt.city, function(err, data) {
+        var i, j, feat, classifier;
+        for (i=0; i<data.features.length; i++) {
+          feat = data.features[i];
+          
+          if (feat.classifiers && feat.classifiers.length) {
+            for(j=0; j<feat.classifiers.length; j++) {
+              classifier = feat.classifiers[j];
+                            
+              if (classifier.category === 'Neighborhood') {
+                evt.neighborhood = feat.name;
+              }
+              
+              if (classifier.category === 'Time Zone') {
+                evt.tzid = feat.name;
+              }
+            }
+          }
+        }
+        
+        console.log(evt);
+        
+        if (callback) {
+          callback([evt]);
+        }
+      });
+    } else {
+      
+      console.log(evt);
+      
+      if (callback) {
+        callback([evt]);
+      }
     }
   });
 };
@@ -174,51 +215,3 @@ exports.resetDb = function() {
     });
   });
 };
-
-
-exports.addUrl = function(url, callback) {
-  exports.parseMicrodata(url, function(newEvents) {
-    exports.save(newEvents, function(eventsArray){
-      if (callback) {
-        callback(eventsArray);
-      }                
-    });
-  });
-};
-
-
-/*
-exports.refresh = function() {
-    eventsDb.destroy(function() {
-        eventsDb.create(function() {
-            eventsDb.save('_design/events', {
-                origin_url: {
-                    map: function (doc) {
-                        emit(doc.origin_url, doc);
-                    }
-                }
-            });
-
-            //Each line of this file is an ics url
-            fs.readFile('./ics_urls.txt', function (err, data) {
-                var lines = data.toString().split('\n'),
-                    url,
-                    i;
-
-                for (i=0; i<lines.length; i++) {
-                    url = lines[i];
-                    ical.fromURL(url, {}, function(err, newEvents){
-                        newEvents = newEvents || {};
-
-                        if (err) {
-                            console.log(err);
-                        }
-
-                        save(newEvents, url );
-                    });
-                }
-            });        
-        });
-    });
-};
-*/

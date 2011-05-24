@@ -1,0 +1,4 @@
+exports.simplegeo = {
+  key: '',
+  secret: ''
+};
