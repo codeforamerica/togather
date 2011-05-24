@@ -108,6 +108,7 @@ exports.fromUrl = function(url, callback) {
 exports.parse = function(html, callback) {
   //Get the roots - itemscopes that are not also itemprops
   var result = parseItemScope($('[itemscope]:not([itemprop])', html), 1),
+    err,
     standardResult = {
       //what
       summary: result.summary,
@@ -122,9 +123,7 @@ exports.parse = function(html, callback) {
       city: (result && result.locality) ? result.locality.address.locality : null
     };
   
-  console.log(standardResult);
-  
   if (callback) {
-    callback(standardResult);
+    callback(err, standardResult);
   }
 };
