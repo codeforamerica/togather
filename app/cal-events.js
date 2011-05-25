@@ -8,8 +8,8 @@ var ical = require('./ical'),
     cradle = require('cradle'),
     crypto = require('crypto');
 
-//datejs modifies the Date prototype and doesn't work as a module
-require('./date');
+//datejs modifies the Date prototype and doesn't work as a module, though it is loaded with npm
+require('datejs');
 
 //Setup the DB connection
 var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events'),
