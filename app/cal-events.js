@@ -7,6 +7,9 @@ var ical = require('./ical'),
     cradle = require('cradle'),
     crypto = require('crypto');
 
+//datejs modifies the Date prototype and doesn't work as a module
+require('./date');
+
 //Setup the DB connection
 var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events');
 
@@ -53,7 +56,7 @@ exports.get = function(callback) {
 // Gets the events sorted into groups by day
 exports.getByDay = function(callback) {
     exports.get(function(events) {
-        var groups, i, today, eventDate, todayStart, todayEnd, tomorrowStart, tomorrowEnd;
+        var groups, i, eventDate;
 
         groups = {
             today: [],
@@ -61,38 +64,15 @@ exports.getByDay = function(callback) {
             future: []
         };
 
-        today = new Date();
         for ( i=0; i < events.length; i++) {
           event = events[i];
 
-          eventDate = new Date(event.startDate);
+          eventDate = Date.parse(event.startDate);
 
-          todayStart = new Date();
-          todayStart.setHours(0);
-          todayStart.setMinutes(0);
-          todayStart.setSeconds(0);
-
-          todayEnd = new Date();
-          todayEnd.setHours(23);
-          todayEnd.setMinutes(59);
-          todayEnd.setSeconds(59);
-
-          tomorrowStart = new Date();
-          tomorrowStart.setDate(tomorrowStart.getDate() + 1);
-          tomorrowStart.setHours(0);
-          tomorrowStart.setMinutes(0);
-          tomorrowStart.setSeconds(0);
-
-          tomorrowEnd = new Date();
-          tomorrowEnd.setDate(tomorrowEnd.getDate() + 1);
-          tomorrowEnd.setHours(23);
-          tomorrowEnd.setMinutes(59);
-          tomorrowEnd.setSeconds(59);
-
-          if (eventDate >= todayStart && eventDate <= todayEnd) {
+          if (Date.equals(eventDate, Date.today())) {
             groups.today.push(event);
           } else {
-            if (eventDate >= tomorrowStart && eventDate <= tomorrowEnd) {
+            if ( Date.equals(eventDate, Date.today().add(1).day())) {
               groups.tomorrow.push(event);
             } else {
               groups.future.push(event);
