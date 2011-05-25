@@ -119,7 +119,8 @@ exports.parse = function(html, callback) {
       tzOffset: null,
       //where
       streetAddress: (result && result.locality) ? result.locality.address['street-address'] : null,
-      city: (result && result.locality) ? result.locality.address.locality : null
+      city: (result && result.locality && result.locality.address) ? result.locality.address.locality : null,
+      state: (result && result.locality && result.locality.address) ? result.locality.address.region : null
     };
       
   if (callback) {

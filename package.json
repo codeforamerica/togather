@@ -19,6 +19,7 @@
     "request": "1.9.5",
     "jquery": "1.5.1",
     "simplegeo-client": "0.1.0",
-    "datejs": "0.0.2"
+    "datejs": "0.0.2",
+    "googlemaps": "0.1.2"
   }
 }

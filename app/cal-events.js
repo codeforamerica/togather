@@ -4,6 +4,7 @@ var ical = require('./ical'),
     fs = require('fs'),
     SimpleGeo = require('simplegeo-client').SimpleGeo,
     sg = new SimpleGeo(auth.simplegeo.key, auth.simplegeo.secret),
+    gm = require('googlemaps'),
     time = require('time'),
     cradle = require('cradle'),
     crypto = require('crypto');
@@ -12,7 +13,7 @@ var ical = require('./ical'),
 require('datejs');
 
 //Setup the DB connection
-var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events'),
+var eventsDb = new (cradle.Connection)('localhost','5984').database('togather_events'),
   requiredProps = ['summary', 'startDate', 'streetAddress', 'city'];
 
 //Saves new events to the database. This will create events if
@@ -164,37 +165,57 @@ exports.parseMicrodata = function(url, callback) {
     
       //Add couch id
       standardResult._id = hash;
-    
-      //Extract the TZ and Neighborhood via SimpleGeo
-      sg.getContextByAddress(standardResult.streetAddress + ' ' + standardResult.city, function(err, data) {
-        var i, j, feat, classifier;
-        for (i=0; i<data.features.length; i++) {
-          feat = data.features[i];
+      
+      gm.geocode(standardResult.streetAddress + ' ' + 
+        standardResult.city + ' ' + standardResult.state, function(err, result) {
+        var lat, lon;
         
-          if (feat.classifiers && feat.classifiers.length) {
-            for(j=0; j<feat.classifiers.length; j++) {
-              classifier = feat.classifiers[j];
-                          
-              if (classifier.category === 'Neighborhood') {
-                standardResult.neighborhood = feat.name;
+        if (result && result.results && result.results.length > 0) {
+          lat = result.results[0].geometry.location.lat;
+          lon = result.results[0].geometry.location.lng;
+
+          //Extract the TZ and Neighborhood via SimpleGeo
+          sg.getContextByLatLng(lat, lon, function(err, data) {
+            var i, j, feat, classifier;
+
+            if (data) {
+              for (i=0; i<data.features.length; i++) {
+                feat = data.features[i];
+
+                if (feat.classifiers && feat.classifiers.length) {
+                  for(j=0; j<feat.classifiers.length; j++) {
+                    classifier = feat.classifiers[j];
+
+                    if (classifier.category === 'Neighborhood') {
+                      standardResult.neighborhood = feat.name;
+                    }
+
+                    if (classifier.category === 'Time Zone') {
+                      standardResult.tzid = feat.name;
+                    }
+                  }
+                }
+
+                if (data.query) {
+                  standardResult.lon = data.query.longitude;
+                  standardResult.lat = data.query.latitude;
+                }
               }
-            
-              if (classifier.category === 'Time Zone') {
-                standardResult.tzid = feat.name;
-              }
+
+              //Set the tzOffset
+              startDate = new time.Date(time.Date.parse(standardResult.startDate));
+              startDate.setTimezone(standardResult.tzid);
+              standardResult.tzOffset = -(startDate.getTimezoneOffset() / 60);
+            } else {
+              console.log(err);
+              console.log(data);
             }
-          }
-        }
-        
-        //Set the tzOffset
-        startDate = new time.Date(time.Date.parse(standardResult.startDate));
-        startDate.setTimezone(standardResult.tzid);
-        standardResult.tzOffset = -(startDate.getTimezoneOffset() / 60);
-        
-        console.log(standardResult);
-        
-        if (callback) {
-          callback(err, [standardResult]);
+            console.log(standardResult);
+
+            if (callback) {
+              callback(err, [standardResult]);
+            }
+          });
         }
       });
     } else {
