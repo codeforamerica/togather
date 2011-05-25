@@ -11,6 +11,8 @@ a:hover, a:active { color:#96a044; text-decoration:underline; }
 .left { float:left; }
 .clear { clear: both; }
 
+.error { color:#A30A30; font-weight:bold; }
+
 #page-header {
   height:20px;
   padding:15px 20px;
