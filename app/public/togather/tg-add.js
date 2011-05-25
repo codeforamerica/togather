@@ -58,7 +58,8 @@
             //self.close();
           },
           error: function(jqXHR, textStatus, errorThrown) {
-            console.log(errorThrown);
+            console.log(jqXHR);
+            $('#cal-add-preview').html('<div class="error">' + jqXHR.responseText + '</div>');
           }
         });
       }

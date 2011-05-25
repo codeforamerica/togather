@@ -4,6 +4,7 @@ var ical = require('./ical'),
     fs = require('fs'),
     SimpleGeo = require('simplegeo-client').SimpleGeo,
     sg = new SimpleGeo(auth.simplegeo.key, auth.simplegeo.secret),
+    time = require('time'),
     cradle = require('cradle'),
     crypto = require('crypto');
 
@@ -11,7 +12,8 @@ var ical = require('./ical'),
 require('./date');
 
 //Setup the DB connection
-var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events');
+var eventsDb = new (cradle.Connection)('togather.iriscouch.com','5984').database('togather_events'),
+  requiredProps = ['summary', 'startDate', 'streetAddress', 'city'];
 
 //Saves new events to the database. This will create events if
 //they don't exist or replace them if they do.
@@ -123,60 +125,90 @@ exports.parseIcs = function(url, callback) {
   });
 };
 
+
+var getMissingProperties = function(standardResult) {
+  var i, 
+    missing = [],
+    standarResult = standardResult || {};
+  
+  for (i=0; i<requiredProps.length; i++) {
+    if (!standardResult[requiredProps[i]]) {
+      missing.push(requiredProps[i]);
+    }
+  }
+  
+  return missing;
+};
+
 exports.parseMicrodata = function(url, callback) {
-  md.fromUrl(url, function(err, evt) {
-    //Create a hash of the UID to make it easier to look up
-    //records from the database.
-    var hash = crypto.createHash('md5').update(url).digest('hex');
+  md.fromUrl(url, function(standardResult) {
+    var hash,
+      missingProps = getMissingProperties(standardResult),
+      startDate;
     
-    //Add origin url
-    evt.origin_url = url;
+    console.log(missingProps);
     
-    //Set the url if it doesn't exist
-    evt.url = evt.url || url;
+    if (missingProps.length === 0) {
+      //Create a hash of the UID to make it easier to look up
+      //records from the database.
+      hash = crypto.createHash('md5').update(url).digest('hex');
+    
+      //Add origin url
+      standardResult.origin_url = url;
+    
+      //Set the url if it doesn't exist
+      standardResult.url = standardResult.url || url;
         
-    //Add sync time
-    evt.synced_on = new Date();
+      //Add sync time
+      standardResult.synced_on = new Date();
     
-    //Add couch id
-    evt._id = hash;
+      //Add couch id
+      standardResult._id = hash;
     
-    //Extract the TZ and Neighborhood, if we have any location data
-    if (evt.streetAddress && evt.city) {
-      
-      //Query SimpleGeo for the context data
-      sg.getContextByAddress(evt.streetAddress + ' ' + evt.city, function(err, data) {
+      //Extract the TZ and Neighborhood via SimpleGeo
+      sg.getContextByAddress(standardResult.streetAddress + ' ' + standardResult.city, function(err, data) {
         var i, j, feat, classifier;
         for (i=0; i<data.features.length; i++) {
           feat = data.features[i];
-          
+        
           if (feat.classifiers && feat.classifiers.length) {
             for(j=0; j<feat.classifiers.length; j++) {
               classifier = feat.classifiers[j];
-                            
+                          
               if (classifier.category === 'Neighborhood') {
-                evt.neighborhood = feat.name;
+                standardResult.neighborhood = feat.name;
               }
-              
+            
               if (classifier.category === 'Time Zone') {
-                evt.tzid = feat.name;
+                standardResult.tzid = feat.name;
               }
             }
           }
         }
         
-        console.log(evt);
+        //Set the tzOffset
+        startDate = new time.Date(time.Date.parse(standardResult.startDate));
+        startDate.setTimezone(standardResult.tzid);
+        standardResult.tzOffset = -(startDate.getTimezoneOffset() / 60);
+        
+        console.log(standardResult);
         
         if (callback) {
-          callback([evt]);
+          callback(err, [standardResult]);
         }
       });
     } else {
-      
-      console.log(evt);
-      
+      console.log('missing ' + missingProps);
+      console.log(standardResult);
+    
       if (callback) {
-        callback([evt]);
+        callback({
+          name: 'MissingPropertiesError',
+          message: 'Could not find these event properties: ' + missingProps.join(', ') + '. ' +
+            'These may not be set in the source event or not publicly accessible. Consider ' + 
+            'checking the <a href="'+url+'">event source</a> to make them accessible.',
+          data: missingProps
+        }, [standardResult]);
       }
     }
   });

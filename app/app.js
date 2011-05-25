@@ -33,9 +33,13 @@ app.get('/', function(req, res) {
 
 //Parses out an event from a url
 app.get('/parse', function(req, res) {
-  events.parseMicrodata(decodeURIComponent(req.query.url), function(evts) {
-    res.contentType('application/json');
-    res.send(evts);
+  events.parseMicrodata(decodeURIComponent(req.query.url), function(err, evts) {
+    if (err) {
+      res.send(err.message, 500);
+    } else {
+      res.contentType('application/json');
+      res.send(evts);
+    }
   });
 });
 
