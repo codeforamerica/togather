@@ -13,7 +13,7 @@ var ical = require('./ical'),
 require('datejs');
 
 //Setup the DB connection
-var eventsDb = new (cradle.Connection)('localhost','5984').database('togather_events'),
+var eventsDb = new (cradle.Connection)(auth.db.host, auth.db.port).database('togather_events'),
   requiredProps = ['summary', 'startDate', 'streetAddress', 'city'];
 
 //Saves new events to the database. This will create events if
@@ -58,33 +58,47 @@ exports.get = function(callback) {
 
 // Gets the events sorted into groups by day
 exports.getByDay = function(callback) {
-    exports.get(function(events) {
-        var groups, i, eventDate;
+  exports.get(function(events) {
+    var groups, i, eventDate;
 
-        groups = {
-            today: [],
-            tomorrow: [],
-            future: []
-        };
+    groups = {
+      today: [],
+      tomorrow: [],
+      future: []
+    };
 
-        for ( i=0; i < events.length; i++) {
-          event = events[i];
+    for ( i=0; i < events.length; i++) {
+      event = events[i];
 
-          eventDate = Date.parse(event.startDate);
+      eventDate = Date.parse(event.startDate);
 
-          if (Date.equals(eventDate, Date.today())) {
-            groups.today.push(event);
-          } else {
-            if ( Date.equals(eventDate, Date.today().add(1).day())) {
-              groups.tomorrow.push(event);
-            } else {
-              groups.future.push(event);
-            }
-          }
+      if (Date.equals(eventDate, Date.today())) {
+        groups.today.push(event);
+      } else {
+        if ( Date.equals(eventDate, Date.today().add(1).day())) {
+          groups.tomorrow.push(event);
+        } else {
+          groups.future.push(event);
         }
+      }
+    }
 
-        callback(groups);
-    });
+    callback(groups);
+  });
+};
+
+exports.getCategories = function(callback) {
+  exports.get(function(events) {
+    var categories, i, event;
+
+    for ( i=0; i < events.length; i++) {
+      event = events[i];
+      if (event.categories) {
+        categories.push(event.categories);
+      }
+    }
+    callback(categories);
+  });
 };
 
 exports.parseIcs = function(url, callback) {
