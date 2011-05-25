@@ -163,7 +163,8 @@ var getMissingProperties = function(standardResult) {
 exports.parseMicrodata = function(url, callback) {
   md.fromUrl(url, function(standardResult) {
     var hash,
-      missingProps = getMissingProperties(standardResult);
+      missingProps = getMissingProperties(standardResult),
+      startDate;
     
     console.log(missingProps);
     
@@ -204,9 +205,14 @@ exports.parseMicrodata = function(url, callback) {
             }
           }
         }
-      
+        
+        //Set the tzOffset
+        startDate = new time.Date(time.Date.parse(standardResult.startDate));
+        startDate.setTimezone(standardResult.tzid);
+        standardResult.tzOffset = -(startDate.getTimezoneOffset() / 60);
+        
         console.log(standardResult);
-      
+        
         if (callback) {
           callback(err, [standardResult]);
         }
