@@ -252,11 +252,21 @@ exports.parseMicrodata = function(url, callback) {
 exports.resetDb = function() {
   eventsDb.destroy(function() {
     eventsDb.create(function() {
+      
       eventsDb.save('_design/events', {
         origin_url: {
           map: function (doc) {
             emit(doc.origin_url, doc);
           }
+        }
+      });
+      
+      eventsDb.save('_design/neighborhood', {
+        count: {
+          map: function(doc) {
+            emit(doc.neighborhood, 1);
+          },
+          reduce: '_sum'
         }
       });
     });
