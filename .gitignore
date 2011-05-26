@@ -1,4 +1,4 @@
 *.DS_Store
 node_modules
-app/settings/auth.js
+lib/settings/auth.js
 *.log
