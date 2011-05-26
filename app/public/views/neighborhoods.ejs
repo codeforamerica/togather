@@ -1,1 +1,12 @@
-Neighborhoods widget here
+<select id="neighborhood-selector">
+  <option value="">All</option>
+<% 
+  var i, n;
+  for (i=0; i<neighborhoods.length; i++) {
+    n = neighborhoods[i];
+%>
+  <option value="<%= n %>"><%= n %></option>
+<%
+  }
+%>
+</select>

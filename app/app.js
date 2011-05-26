@@ -75,6 +75,12 @@ app.post('/save', function(req, res) {
   });
 });
 
+app.get('/neighborhoods', function(req, res) {
+  events.getNeighborhoods(function(neighborhoods){
+    res.contentType('application/json');
+    res.send(neighborhoods);
+  });
+});
 
 // Only listen on $ node app.js
 if (!module.parent) {

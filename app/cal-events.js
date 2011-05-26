@@ -35,25 +35,25 @@ var sortByStart = function(a, b) {
 
 //Get the events we've already stored for this url
 exports.get = function(callback) {
-    eventsDb.view('events/origin_url', 
-        function (err, results) {
-            var i, eventsArray = [];
-            
-            if (err) {
-                console.log(err);
-            } else {
-                for (i=0; i<results.length; i++) {                                    
-                  eventsArray.push(results[i].value);
-                }
-                
-                eventsArray.sort(sortByStart);
-            }
-            
-            if (callback) {
-              callback(eventsArray);
-            }
+  eventsDb.view('events/origin_url', 
+    function (err, results) {
+      var i, eventsArray = [];
+      
+      if (err) {
+        console.log(err);
+      } else {
+        for (i=0; i<results.length; i++) {                  
+          eventsArray.push(results[i].value);
         }
-    );
+        
+        eventsArray.sort(sortByStart);
+      }
+      
+      if (callback) {
+        callback(eventsArray);
+      }
+    }
+  );
 };
 
 // filter a list of events by a key and value
@@ -118,6 +118,28 @@ exports.getCategories = function(callback) {
     }
     callback(categories);
   });
+};
+
+exports.getNeighborhoods = function(callback) {
+  eventsDb.view('neighborhood/count', { group: true },
+    function (err, results) {
+      var i, hoods = [];
+      
+      if (err) {
+        console.log(err);
+      } else {
+        for (i=0; i<results.length; i++) {
+          hoods.push(results[i].key);
+        }
+        
+        hoods.sort();
+      }
+      
+      if (callback) {
+        callback(hoods);
+      }
+    }
+  );
 };
 
 exports.parseIcs = function(url, callback) {
@@ -286,6 +308,11 @@ exports.resetDb = function() {
             emit(doc.neighborhood, 1);
           },
           reduce: '_sum'
+        },
+        events: {
+          map: function(doc) {
+            emit(doc.neighborhood, doc);
+          }
         }
       });
     });
