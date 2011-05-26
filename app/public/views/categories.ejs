@@ -1,9 +1,13 @@
 <ol>
-  <li>Environment</li>
-  <li>Arts and Culture</li>
-  <li>Public Safety</li>
-  <li>Parks and Recreation</li>
-  <li>Economy and Jobs</li>
-  <li>Education</li>
-  <li>Families and Children</li>
+<%
+var i, category;
+for ( i=0; i<categories.length; i++) {
+category = categories[i];
+%>
+
+<li><%= category %></li>
+
+<%
+}
+%>
 </ol>

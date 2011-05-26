@@ -14,19 +14,43 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
 // Routes
 app.get('/', function(req, res) {
   events.getByDay(function(groups){
-    res.render('days', {
-      'title': 'Events Dashboard',
-      'groups': groups
+    events.getCategories(function(categories){
+      res.render('days', {
+        'title': 'Events Dashboard',
+        'groups': groups,
+        'categories': categories
+      });
+    });
+  });
+});
+
+// index page for categories
+app.get('/category', function(req, res) {
+  events.getCategories(function(cats) {
+    res.render('categories', {
+        'categories': cats
+    });
+  });
+});
+
+// category list page
+app.get('/category/:cat', function(req, res) {
+  events.get(function(allEvents) {
+    events.filterEvents(allEvents, 'categories', 'Environment', function(list) {
+      res.render('events', {
+          'events': list,
+          'categories': ['test cat']
+      });
     });
   });
 });

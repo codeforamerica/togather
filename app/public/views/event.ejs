@@ -4,13 +4,13 @@
   </header>
   <div class="cal-whenwhere">
     <span class="when">
-      <img src="./togather/css/images/clock-icon.png"></img>
+      <img src="/togather/css/images/clock-icon.png"></img>
       <time itemprop="startDate" datetime="<%= event.startDate %>"><%= new Date(Date.parse(event.startDate)).toLocaleTimeString() %></time>
       -
       <time itemprop="endDate" datetime="<%= event.endDate %>"><%= new Date(Date.parse(event.endDate)).toLocaleTimeString() %></time>
     </span>
     <span class="where">
-      <img src="./togather/css/images/pin-icon.png"></img>
+      <img src="/togather/css/images/pin-icon.png"></img>
       <span itemprop="location"><%= event.streetAddress %></span>
     </span>
   </div>

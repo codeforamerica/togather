@@ -56,6 +56,22 @@ exports.get = function(callback) {
     );
 };
 
+// filter a list of events by a key and value
+exports.filterEvents = function(list, filterKey, filterValue, callback) {
+  var i
+    , event
+    , result = [];
+
+  for (i=0; i < list.length; i++) {
+    event = list[i];
+    if (event[filterKey] == filterValue) {
+      result.push(event);
+    }
+  }
+  callback(result);
+};
+
+
 // Gets the events sorted into groups by day
 exports.getByDay = function(callback) {
   exports.get(function(events) {
@@ -89,11 +105,14 @@ exports.getByDay = function(callback) {
 
 exports.getCategories = function(callback) {
   exports.get(function(events) {
-    var categories, i, event;
+    var categories = [], 
+        i, 
+        event;
 
     for ( i=0; i < events.length; i++) {
       event = events[i];
       if (event.categories) {
+        console.log(event.categories);
         categories.push(event.categories);
       }
     }
