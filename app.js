@@ -1,11 +1,11 @@
 var express = require('express'),
-  events = require('./cal-events');
+  events = require('./lib/cal-events');
 
 var app = module.exports = express.createServer();
 
 // Configuration
 app.configure(function(){
-  app.set('views', __dirname + '/public/views');
+  app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.use(express.bodyParser());
   app.use(express.methodOverride());

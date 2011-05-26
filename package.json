@@ -1,9 +1,9 @@
 {
   "name": "togather",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Togather",
   "homepage": "http://codeforamerica.org",
-  "main": "./app/app.js",
+  "main": "./app.js",
   "repository" : { 
     "type": "git",
     "url": "git@github.com:codeforamerica/togather.git"
