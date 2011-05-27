@@ -1,5 +1,5 @@
 var express = require('express'),
-  events = require('./lib/cal-events');
+  events = require('./lib/controller');
 
 var app = module.exports = express.createServer();
 
