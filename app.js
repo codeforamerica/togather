@@ -22,15 +22,12 @@ app.configure('production', function(){
 });
 
 // Routes
-app.get('/', function(req, res) {
-  events.getByDay(function(groups){
-    events.getCategories(function(categories){
-      res.render('days', {
-        'title': 'Events Dashboard',
-        'groups': groups,
-        'categories': categories
-      });
-    });
+app.get('/', events.addByDay, events.addCategories, events.addNeighborhoods, function(req, res) {
+  res.render('days', {
+    'title': 'Events Dashboard',
+    'groups': res.groups,
+    'categories': res.categories,
+    'neighborhoods': res.neighborhoods
   });
 });
 
