@@ -82,6 +82,13 @@ app.get('/neighborhoods', function(req, res) {
   });
 });
 
+//Give the client access to the views
+app.get('/views/:file.:format', function(req, res) {
+  res.contentType('text/plain');
+  res.sendfile(__dirname + '/views/' + req.params.file + '.' + req.params.format);
+});
+
+
 // Only listen on $ node app.js
 if (!module.parent) {
   app.listen(8080);
