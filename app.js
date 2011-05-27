@@ -1,5 +1,5 @@
 var express = require('express'),
-  events = require('./lib/controller');
+  events = require('./lib/controllers/events');
 
 var app = module.exports = express.createServer();
 
