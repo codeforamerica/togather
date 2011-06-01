@@ -55,7 +55,7 @@
             events = data;
             refresh();
             
-            //self.close();
+            $('#cal-add-categories').show();
           },
           error: function(jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -89,12 +89,26 @@
       '<section class="preview-input-container"><input type="text" id="'+options.previewInputId+'" class="textfield" value="" />' + 
       '<button id="'+options.previewButtonId+'">Preview</button></section>' + 
       '<section id="cal-add-preview"></section>' + 
+      '<section id="cal-add-categories"><ul id="cal-add-cat-list"></ul><input id="cal-add-cat-input" />' + 
+      '<button id="cal-add-cat-btn">Add</button></section>' + 
       '<footer><button id="'+options.saveButtonId+'">Save</button>' +
       '<a id="'+options.closeDialogButtonId+'" href="javascript:void(0);">Close</a></footer></div>').appendTo('body');
     
     sb = skinnybox({
       overlay: options.overlayId, 
       box: options.boxId
+    });
+    
+    autocomplete({
+      inputId: 'cal-add-cat-input',
+      listId: 'cal-add-cat-list',
+      buttonId: 'cal-add-cat-btn',
+      sourceUrl: 'categories',
+      callback: function(categories) {
+        if (events && events.length) {
+          events[0].categories = categories;
+        }
+      }
     });
     
     $saveButton = $('#' + options.saveButtonId);
