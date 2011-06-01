@@ -1,6 +1,4 @@
-var Togather = Togather || {};
-
-Togather.autocomplete = (function(){
+var autocomplete = (function(){
   return function(options) {
     var self = {},
         $input = $('#' + options.inputId),
@@ -28,7 +26,7 @@ Togather.autocomplete = (function(){
       $list.html(html);
       
       if (options.callback) {
-        callback(selected);
+        options.callback(selected);
       }
     };
 
@@ -66,6 +64,20 @@ Togather.autocomplete = (function(){
           console.log(jqXHR);
         }
       });
+      
+      $input.keyup(function(event){
+        if(event.keyCode === 13) {
+          addToList($input.val());
+          $input.val('');
+        }
+      });
+      
+      if (options.buttonId) {
+        $('#' + options.buttonId).click(function(){
+          addToList($input.val());
+          $input.val('');
+        });
+      }
       
       $('.ui-icon', $list).live('click', function(event) {
         var val = $(this).next('.autocomplete-item').text();
