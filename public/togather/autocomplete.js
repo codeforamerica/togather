@@ -66,16 +66,22 @@ var autocomplete = (function(){
       });
       
       $input.keyup(function(event){
-        if(event.keyCode === 13) {
-          addToList($input.val());
+        var val = $input.val();
+        if(val && event.keyCode === 13) {
+          addToList(val);
+          $input.autocomplete('close');
           $input.val('');
         }
       });
       
       if (options.buttonId) {
         $('#' + options.buttonId).click(function(){
-          addToList($input.val());
-          $input.val('');
+          var val = $input.val();
+          if(val) {
+            addToList($input.val());
+            $input.autocomplete('close');
+            $input.val('');
+          }
         });
       }
       
