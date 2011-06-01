@@ -32,6 +32,14 @@ app.get('/', events.addByDay, events.addCategories, function(req, res) {
 });
 
 // index page for categories
+app.get('/categories', function(req, res) {
+  events.getCategories(function(cats) {
+    res.contentType('application/json');
+    res.send(cats);
+  });
+});
+
+// index page for categories
 app.get('/category', function(req, res) {
   events.getCategories(function(cats) {
     res.render('categories', {
