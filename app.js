@@ -22,12 +22,12 @@ app.configure('production', function(){
 });
 
 // Routes
-app.get('/', events.addByDay, events.addCategories, events.addNeighborhoods, function(req, res) {
+app.get('/', events.addByDay, events.addCategories, function(req, res) {
   res.render('days', {
     'title': 'Events Dashboard',
     'groups': res.groups,
     'categories': res.categories,
-    'neighborhoods': res.neighborhoods
+    'neighborhood': req.query.neighborhood || ''
   });
 });
 
@@ -73,7 +73,7 @@ app.post('/save', function(req, res) {
 });
 
 app.get('/neighborhoods', function(req, res) {
-  events.getNeighborhoods(function(neighborhoods){
+  events.getNeighborhoods(function(err, neighborhoods){
     res.contentType('application/json');
     res.send(neighborhoods);
   });
