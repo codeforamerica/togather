@@ -16,10 +16,6 @@
           select: function(event, ui) {
             console.log('select');
             window.location = '/?neighborhood=' + ui.item.value;
-          },
-          change: function() {
-            console.log('change');
-            window.location = '/?neighborhood=' + ui.item.value;
           }
         });
       },
