@@ -5,9 +5,7 @@
   <div class="cal-whenwhere">
     <span class="when">
       <img src="/togather/css/images/clock-icon.png"></img>
-      <time itemprop="startDate" datetime="<%= event.startDate %>"><%= new Date(Date.parse(event.startDate)).toLocaleTimeString() %></time>
-      -
-      <time itemprop="endDate" datetime="<%= event.endDate %>"><%= new Date(Date.parse(event.endDate)).toLocaleTimeString() %></time>
+      <time itemprop="startDate" datetime="<%= event.startDate %>"><%= event.prettyStartDate + ' at ' + event.prettyStartTime %></time>
     </span>
     <span class="where">
       <img src="/togather/css/images/pin-icon.png"></img>
