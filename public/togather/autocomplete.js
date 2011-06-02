@@ -4,7 +4,7 @@ var autocomplete = (function(){
         $input = $('#' + options.inputId),
         $list = $('#' + options.listId).addClass('autocomplete-list'),
         autocompleteData,
-        selected = [];
+        selected = options.defaultList || [];
 
     var indexOf = function(array, val) {
       var i;
@@ -16,7 +16,7 @@ var autocomplete = (function(){
       return -1;
     };
     
-    var refreshList = function() {
+    var refreshList = function(preventCallback) {
       var i, html = '';
       for (i=0; i<selected.length; i++) {
         html += '<li><span class="ui-icon ui-icon-circle-close"></span>' + 
@@ -25,7 +25,7 @@ var autocomplete = (function(){
       
       $list.html(html);
       
-      if (options.callback) {
+      if (options.callback && !preventCallback) {
         options.callback(selected);
       }
     };
@@ -40,7 +40,7 @@ var autocomplete = (function(){
 
     var addToList = function(val) {
       if (indexOf(selected, val) === -1) {
-        selected.push(val);
+        selected = selected.concat(val);
         refreshList();
       }
     };
@@ -92,7 +92,9 @@ var autocomplete = (function(){
     };
 
     bindEvents();
-
+    
+    refreshList(true);
+    
     return self;
   };
 })();
