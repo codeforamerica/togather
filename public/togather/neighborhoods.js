@@ -1,29 +1,20 @@
-(function(){
-  var options = {
-        selectorId: 'neighborhood-selector'
-      },
-      $selector = $('#' + options.selectorId),
-      neighborhoods;
-    
-  var bindEvents = function() {
-    $.ajax({
-      url: 'neighborhoods',
-      success: function(data, textStatus, jqXHR) {
-        neighborhoods = data;
-        
-        $selector.autocomplete({
-          source: neighborhoods,
-          select: function(event, ui) {
-            console.log('select');
-            window.location = '/?neighborhood=' + ui.item.value;
-          }
-        });
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-      }
-    });
-  };
+(function() {
+  var selected = $('li', '#neighborhood-list').map(function() {
+    return $('.autocomplete-item', this).text();
+  }).get();
   
-  bindEvents();
+  autocomplete({
+    inputId: 'neighborhood-input',
+    listId: 'neighborhood-list',
+    buttonId: 'neighborhood-add-btn',
+    sourceUrl: 'neighborhoods',
+    defaultList: selected,
+    callback: function(n) {
+      if (n && n.length) {
+        window.location = '/?neighborhood=' + n.join(',');
+      } else {
+        window.location = '/';
+      }
+    }
+  });
 })();

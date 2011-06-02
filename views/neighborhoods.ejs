@@ -1,1 +1,15 @@
-<input id="neighborhood-selector" value="<%= neighborhood %>" />
+<ul id="neighborhood-list">
+<% 
+  var i;
+  for (i=0; i<neighborhoods.length; i++) { 
+%>
+    <li>
+      <span class="ui-icon ui-icon-circle-close"></span>
+      <span class="autocomplete-item"><%= neighborhoods[i] %></span>
+    </li>
+<%
+  }
+%>
+</ul>
+<input id="neighborhood-input" value="" />
+<button id="neighborhood-add-btn">Add</button>

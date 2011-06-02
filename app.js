@@ -27,7 +27,7 @@ app.get('/', events.addByDay, events.addCategories, function(req, res) {
     'title': 'Events Dashboard',
     'groups': res.groups,
     'categories': res.categories,
-    'neighborhood': req.query.neighborhood || ''
+    'neighborhoods': req.query.neighborhood ? req.query.neighborhood.split(',') : ''
   });
 });
 
