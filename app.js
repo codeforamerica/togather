@@ -49,12 +49,14 @@ app.get('/category', function(req, res) {
 });
 
 // category list page
-app.get('/category/:cat', function(req, res) {
+app.get('/category/:cat', events.addCategories, function(req, res) {
   events.get(function(allEvents) {
-    events.filterEvents(allEvents, 'categories', 'Environment', function(list) {
-      res.render('events', {
+    events.filter(allEvents, 'categories', req.params.cat, function(list) {
+      res.render('category', {
           'events': list,
-          'categories': ['test cat']
+          'category': req.params.cat,
+          'categories': res.categories,
+          'neighborhoods': req.query.neighborhood ? req.query.neighborhood.split(',') : ''
       });
     });
   });
